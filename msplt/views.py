@@ -29,6 +29,34 @@ def login(request):
             return render(request, 'login.html', {"message": message})
     return render(request, 'login.html')
 
+def register(request):
+    if request.method == 'POST':
+        message = '请检查填写的内容！'
+        username = request.POST.get('username', None)
+        password1 = request.POST.get('password1', None)
+        password2 = request.POST.get('password2', None)
+        email = request.POST.get('email', None)
+        if username is None:
+            return render(request, 'login.html', {"message": message, "signup": True})
+        if password1 !=password2:
+            message = '两次输入密码不同！'
+            return render(request, 'login.html', {"message": message, "signup": True})
+        else:
+            same_name_user = models.UserProfile.objects.filter(name=username)
+            if same_name_user:
+                message = '用户名已经存在，请更换用户名!'
+                return render(request, 'login.html', {"message": message, "signup": True})
+            same_email_user = models.UserProfile.objects.filter(email=email)
+            if same_email_user:
+                message = '该邮箱地址已经被注册，请使用别的邮箱!'
+                return render(request, 'login.html', {"message": message, "signup": True})
+            new_user = models.UserProfile.objects.create()
+            new_user.name = username
+            new_user.password = password1
+            new_user.email = email
+            new_user.save()
+            return redirect('login')
+
 
 def gentella_html(request):
     context = {}
