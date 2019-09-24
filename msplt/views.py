@@ -12,6 +12,8 @@ def index(request):
     return render(request, 'index.html')
 
 def login(request):
+    if request.session.get('is_login', None):
+        return redirect('/index.html')
     if request.method == 'POST':
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
@@ -21,6 +23,9 @@ def login(request):
             try:
                 user = models.UserProfile.objects.get(name=username)
                 if user.password == password:
+                    request.session['is_login'] = True
+                    request.session['user_id'] = user.id
+                    request.session['user_name'] = user.name
                     return redirect('/index.html')
                 else:
                     message = "密码不正确！"
@@ -29,7 +34,15 @@ def login(request):
             return render(request, 'login.html', {"message": message})
     return render(request, 'login.html')
 
+def logout(request):
+    if not request.session.get('is_login', None):
+        return redirect('/index.html')
+    request.session.flush()
+    return redirect('login.html')
+
 def register(request):
+    if request.session.get('is_login', None):
+        return redirect("/index.html")
     if request.method == 'POST':
         message = '请检查填写的内容！'
         username = request.POST.get('username', None)
