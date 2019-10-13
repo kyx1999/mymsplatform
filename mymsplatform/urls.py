@@ -22,5 +22,6 @@ urlpatterns = [
     re_path(r'^.*\.html', views.gentella_html, name='gentella'),
     path('', views.login, name='default'),
     path('login', views.login, name='login'),
-    path('register',views.register, name='register'),
+    path('register', views.register, name='register'),
+    path('index', views.index, name='index'),
 ]

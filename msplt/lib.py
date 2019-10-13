@@ -3,8 +3,7 @@ from kubernetes.client.rest import ApiException
 from pprint import pprint
 from kubernetes import client, config, watch
 
-
-class lib(object):
+class manager(object):
     def __init__(self):
         config.load_kube_config('E:/pythonProject/test/resource/config')
         self.core_v1 = client.CoreV1Api()

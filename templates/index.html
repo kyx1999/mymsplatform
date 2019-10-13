@@ -142,7 +142,7 @@
                   <div class="tile-stats">
 {#                       <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>#}
                       <div class="count" style="font-size: 30px">Nodes</div>
-                      <h3>8</h3>
+                      <h3>{{ node_num }}</h3>
 {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
@@ -150,7 +150,7 @@
                   <div class="tile-stats">
 {#                      <div class="icon"><i class="fa fa-comments-o"></i></div>#}
                       <div class="count" style="font-size: 30px">Namespaces</div>
-                      <h3>10</h3>
+                      <h3>{{ ns_num }}</h3>
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
@@ -158,7 +158,7 @@
                   <div class="tile-stats">
 {#                      <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>#}
                       <div class="count" style="font-size: 30px">Services</div>
-                      <h3>10</h3>
+                      <h3>{{ service_num }}</h3>
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
@@ -166,7 +166,7 @@
                   <div class="tile-stats">
 {#                      <div class="icon"><i class="fa fa-check-square-o"></i></div>#}
                       <div class="count" style="font-size: 30px">Pods</div>
-                      <h3>15</h3>
+                      <h3>{{ pod_num }}</h3>
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
@@ -255,22 +255,24 @@
                 <thead>
                   <tr>
                     <th>名称</th>
-                    <th>标签</th>
-                    <th>已就绪</th>
-                    <th>CPU请求值（核）</th>
-                    <th>CPU限制值（核）</th>
+                    <th>IP</th>
+                    <th>可分配CPU(核)</th>
+                    <th>总CPU(核)</th>
+                    <th>可分配内存</th>
+                    <th>总内存</th>
                   </tr>
                 </thead>
 
-
                 <tbody>
+                {% for node in node_list %}
                   <tr>
-                    <td>k8s-node01</td>
-                    <td></td>
+                    <td>{{ node.name }}</td>
+                    <td>{{ node.ip }}</td>
                     <td>unKnown</td>
                     <td>0.1 (10.00%) </td>
                     <td>0.1 (10.00%) </td>
                   </tr>
+                {% endfor %}
                   <tr>
                     <td>k8s-master01</td>
                     <td></td>

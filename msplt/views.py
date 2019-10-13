@@ -3,13 +3,28 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib import messages
 from msplt import models
-
+from msplt.lib import manager
 # Create your views here.
 
 
 def index(request):
-    pass
-    return render(request, 'index.html')
+    mgr = manager()
+    node = mgr.getNode()
+    ns = mgr.getNS()
+    service = mgr.getService()
+    pod = mgr.getPod()
+    print(node)
+    node_num = node['num']
+    ns_num = ns['num']
+    service_num = service['num']
+    pod_num = pod['num']
+    print(node_num)
+    node_list = node['node_list']
+    return render(request, 'index.html', {'node_num': node_num,
+                                          'ns_num': ns_num,
+                                          'service_num': service_num,
+                                          'pod_num': pod_num,
+                                          'node_list': node_list})
 
 def login(request):
     if request.method == 'POST':
@@ -21,7 +36,7 @@ def login(request):
             try:
                 user = models.UserProfile.objects.get(name=username)
                 if user.password == password:
-                    return redirect('/index.html')
+                    return redirect('/index')
                 else:
                     message = "密码不正确！"
             except:
