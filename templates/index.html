@@ -141,20 +141,26 @@
           <div class="col-md-12">
             <div class="panel panel-body">
               <div class="row">
-                <div class="col-xs-4">
-                  <span class="chart" data-percent={{ cpu_ratio }}>CPU
-                    <span class="percent"></span>
+                <div class="col-xs-4" >
+{#                  <span class="chart" data-percent={{ cpu_ratio }}>CPU#}
+                    <span class="chart" data-percent={{ cpu_ratio }}>cpu
+{#                    <span class="percent"></span>#}
                   </span>
+                     <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">CPU: &nbsp;&nbsp; {{ cpu_ratio }}%</span>
                 </div>
                 <div class="col-xs-4" >
-                  <span class="chart" data-percent={{ mem_ratio }}>Mem
-                    <span class="percent"></span>
+{#                  <span class="chart" data-percent={{ mem_ratio }}>Mem#}
+                    <span class="chart" data-percent={{ mem_ratio }}>Mem
+{#                    <span class="percent"></span>#}
                   </span>
+                    <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">MEM: &nbsp;&nbsp; {{ mem_ratio }}%</span>
                 </div>
                 <div class="col-xs-4" >
-                  <span class="chart" data-percent={{ pod_ratio }}>Pods
-                    <span class="percent"></span>
+{#                  <span class="chart" data-percent={{ pod_ratio }}>Pods#}
+                    <span class="chart" data-percent={{ pod_ratio }}>Pods
+{#                    <span class="percent"></span>#}
                   </span>
+                    <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">POD: &nbsp;&nbsp; {{ pod_ratio }}%</span>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -164,7 +170,7 @@
 
         <div class="col-md-12 col-sm-12 col-xs-12">
           <div class="row top_tiles">
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 25%">
                   <div class="tile-stats">
 {#                       <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>#}
                       <div class="count" style="font-size: 30px">Nodes</div>
@@ -172,7 +178,7 @@
 {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 25%">
                   <div class="tile-stats">
 {#                      <div class="icon"><i class="fa fa-comments-o"></i></div>#}
                       <div class="count" style="font-size: 30px">Namespaces</div>
@@ -180,7 +186,7 @@
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 25%">
                   <div class="tile-stats">
 {#                      <div class="icon"><i class="fa fa-sort-amount-desc"></i></div>#}
                       <div class="count" style="font-size: 30px">Services</div>
@@ -188,7 +194,7 @@
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">
+              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 25%">
                   <div class="tile-stats">
 {#                      <div class="icon"><i class="fa fa-check-square-o"></i></div>#}
                       <div class="count" style="font-size: 30px">Pods</div>
@@ -196,14 +202,14 @@
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
                   </div>
               </div>
-              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">
-                  <div class="tile-stats">
+{#              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">#}
+{#                  <div class="tile-stats">#}
 {#                      <div class="icon"><i class="fa fa-check-square-o"></i></div>#}
-                      <div class="count" style="font-size: 30px">Deployments</div>
-                      <h3>{{ deployment_num }}</h3>
+{#                      <div class="count" style="font-size: 30px">Deployments</div>#}
+{#                      <h3>{{ deployment_num }}</h3>#}
                       {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
-                  </div>
-              </div>
+{#                  </div>#}
+{#              </div>#}
           </div>
         </div>
 
