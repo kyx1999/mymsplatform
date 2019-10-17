@@ -14,18 +14,29 @@ def index(request):
     ns = mgr.getNS()
     service = mgr.getService()
     pod = mgr.getPod()
-    print(node)
+    deployment = mgr.getDeployment()
+    # print(node)
     node_num = node['num']
     ns_num = ns['num']
     service_num = service['num']
     pod_num = pod['num']
-    print(node_num)
+    # print(node_num)
     node_list = node['node_list']
+    cpu_ratio = node['cpu_ratio']
+    mem_ratio = node['mem_ratio']
+    deployment_num = deployment['num']
+    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    print(cpu_ratio)
+    print(mem_ratio)
     return render(request, 'index.html', {'node_num': node_num,
                                           'ns_num': ns_num,
                                           'service_num': service_num,
                                           'pod_num': pod_num,
-                                          'node_list': node_list})
+                                          'deployment_num': deployment_num,
+                                          'node_list': node_list,
+                                          'cpu_ratio': cpu_ratio,
+                                          'mem_ratio': mem_ratio,
+                                          'pod_ratio': pod_ratio})
 
 def login(request):
     if request.method == 'POST':

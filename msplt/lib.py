@@ -32,7 +32,11 @@ class manager(object):
         return {'dic': ret.items, 'num': len(ret.items)}
 
     def getDeployment(self):
-        # TODO
+        print('List Deployments and the number of Deployments')
+        ret = self.apps_v1.list_deployment_for_all_namespaces()
+        # for i in ret.items:
+        #     print("%s\t%s\t%s\t%s" % ())
+        return {'dic': ret.items, 'num': len(ret.items)}
         pass
 
     def getNode(self):
@@ -40,21 +44,31 @@ class manager(object):
         ret = self.core_v1.list_node()
         count = 0
         node_list = []
+        capacity_cpu_sum = 0
+        allocatable_cpu_sum = 0
+        capacity_mem_sum = 0
+        allocatable_mem_sum = 0
         for i in ret.items:
             ip = i.status.addresses[0].address
             name = i.status.addresses[1].address
-            allocatable_cpu = i.status.allocatable['cpu']
-            allocatable_mem = i.status.allocatable['memory']
-            capacity_cpu = i.status.capacity['cpu']
-            capacity_mem = i.status.capacity['memory']
+            allocatable_cpu = int(i.status.allocatable['cpu'])
+            allocatable_cpu_sum += allocatable_cpu
+            allocatable_mem = int(i.status.allocatable['memory'][:-2])/1048576
+            allocatable_mem_sum += allocatable_mem
+            capacity_cpu = int(i.status.capacity['cpu'])
+            capacity_cpu_sum += capacity_cpu
+            capacity_mem = int(i.status.capacity['memory'][:-2])/1048576
+            capacity_mem_sum += capacity_mem
             node_list.append({'ip': ip,
                               'name': name,
                               'allocatable_cpu': allocatable_cpu,
-                              'allocatable_mem': allocatable_mem,
+                              'allocatable_mem': int(allocatable_mem),
                               'capacity_cpu': capacity_cpu,
-                              'capacity_mem': capacity_mem})
+                              'capacity_mem': int(capacity_mem)})
             count += 1
-        return {'node_list': node_list, 'num': count}
+        cpu_ratio = int((allocatable_cpu_sum / capacity_cpu_sum)*100)
+        mem_ratio = int((allocatable_mem_sum / capacity_mem_sum)*100)
+        return {'node_list': node_list, 'num': count, 'cpu_ratio': cpu_ratio, 'mem_ratio': mem_ratio}
 
     def createDeployment(self, name, image, namespace='default', container_port=None, replicas=1):
         port = None
