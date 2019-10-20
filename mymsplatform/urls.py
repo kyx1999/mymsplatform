@@ -25,4 +25,6 @@ urlpatterns = [
     # path('register',views.register, name='register'),
     path('register', views.register, name='register'),
     path('index', views.index, name='index'),
+    path('service', views.service, name='service'),
+    path('pod', views.pod, name='pod')
 ]

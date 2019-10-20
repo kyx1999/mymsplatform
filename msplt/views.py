@@ -10,6 +10,7 @@ from msplt.lib import manager
 
 def index(request):
     mgr = manager()
+    username = request.POST.get('username', None)
     node = mgr.getNode()
     ns = mgr.getNS()
     service = mgr.getService()
@@ -36,7 +37,72 @@ def index(request):
                                           'node_list': node_list,
                                           'cpu_ratio': cpu_ratio,
                                           'mem_ratio': mem_ratio,
-                                          'pod_ratio': pod_ratio})
+                                          'pod_ratio': pod_ratio,
+                                          'username': username})
+
+def service(request):
+    mgr = manager()
+    # username = request.POST.get('username', None)
+    node = mgr.getNode()
+    ns = mgr.getNS()
+    service = mgr.getService()
+    pod = mgr.getPod()
+    deployment = mgr.getDeployment()
+    # print(node)
+    node_num = node['num']
+    ns_num = ns['num']
+    service_num = service['num']
+    pod_num = pod['num']
+    # print(node_num)
+    node_list = node['node_list']
+    cpu_ratio = node['cpu_ratio']
+    mem_ratio = node['mem_ratio']
+    deployment_num = deployment['num']
+    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    print(cpu_ratio)
+    print(mem_ratio)
+    return render(request, 'service.html', {'node_num': node_num,
+                                          'ns_num': ns_num,
+                                          'service_num': service_num,
+                                          'pod_num': pod_num,
+                                          'deployment_num': deployment_num,
+                                          'node_list': node_list,
+                                          'cpu_ratio': cpu_ratio,
+                                          'mem_ratio': mem_ratio,
+                                          'pod_ratio': pod_ratio,
+                                          'username': username})
+
+def pod(request):
+    mgr = manager()
+    # username = request.POST.get('username', None)
+    node = mgr.getNode()
+    ns = mgr.getNS()
+    service = mgr.getService()
+    pod = mgr.getPod()
+    deployment = mgr.getDeployment()
+    # print(node)
+    node_num = node['num']
+    ns_num = ns['num']
+    service_num = service['num']
+    pod_num = pod['num']
+    # print(node_num)
+    node_list = node['node_list']
+    cpu_ratio = node['cpu_ratio']
+    mem_ratio = node['mem_ratio']
+    deployment_num = deployment['num']
+    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    print(cpu_ratio)
+    print(mem_ratio)
+    return render(request, 'pod.html', {'node_num': node_num,
+                                          'ns_num': ns_num,
+                                          'service_num': service_num,
+                                          'pod_num': pod_num,
+                                          'deployment_num': deployment_num,
+                                          'node_list': node_list,
+                                          'cpu_ratio': cpu_ratio,
+                                          'mem_ratio': mem_ratio,
+                                          'pod_ratio': pod_ratio,
+                                          'username': username})
 
 def login(request):
     if request.method == 'POST':
@@ -48,7 +114,7 @@ def login(request):
             try:
                 user = models.UserProfile.objects.get(name=username)
                 if user.password == password:
-                    return redirect('/index')
+                    return redirect('/index.html')
                 else:
                     message = "密码不正确！"
             except:
