@@ -70,9 +70,9 @@ def service(request):
                                           'cpu_ratio': cpu_ratio,
                                           'mem_ratio': mem_ratio,
                                           'pod_ratio': pod_ratio,
-                                          'username': username})
+                                          })
 
-def pod(request):
+def node(request):
     mgr = manager()
     # username = request.POST.get('username', None)
     node = mgr.getNode()
@@ -93,7 +93,7 @@ def pod(request):
     pod_ratio = int((1-pod_num/(node_num*110))*100)
     print(cpu_ratio)
     print(mem_ratio)
-    return render(request, 'pod.html', {'node_num': node_num,
+    return render(request, 'node.html', {'node_num': node_num,
                                           'ns_num': ns_num,
                                           'service_num': service_num,
                                           'pod_num': pod_num,
@@ -101,8 +101,8 @@ def pod(request):
                                           'node_list': node_list,
                                           'cpu_ratio': cpu_ratio,
                                           'mem_ratio': mem_ratio,
-                                          'pod_ratio': pod_ratio,
-                                          'username': username})
+                                         'pod_ratio': pod_ratio,
+                                         })
 
 def login(request):
     if request.method == 'POST':
