@@ -44,7 +44,7 @@ class manager(object):
     def getService_2(self):
         print('Return Service list')
         ret = self.core_v1.list_service_for_all_namespaces()
-        ret2 = self.core_v1.list_node()
+        ret2 = self.core_v1.list_pod_for_all_namespaces
         service_list=[]
         count = 0
 
@@ -63,7 +63,7 @@ class manager(object):
             running_status = "正常"
 
             for m in ret2.items:
-                if m.metadata.labels == selector_check and m.status.conditions.status is not True:
+                if m.metadata.labels == selector_check and (m.status.conditions.phase == "Failed" or m.status.conditions.phase == "Unknown"):
                     running_status = "异常"
 
             service_list.append({'ip': ip,
