@@ -63,7 +63,6 @@ def index(request):
     node_list = node['node_list']
     cpu_ratio = node['cpu_ratio']
     mem_ratio = node['mem_ratio']
-    deployment_num = deployment['num']
     pod_ratio = int((1-pod_num/(node_num*110))*100)
     print(cpu_ratio)
     print(mem_ratio)
@@ -71,13 +70,32 @@ def index(request):
                                           'ns_num': ns_num,
                                           'service_num': service_num,
                                           'pod_num': pod_num,
-                                          'deployment_num': deployment_num,
                                           'node_list': node_list,
                                           'cpu_ratio': cpu_ratio,
                                           'mem_ratio': mem_ratio,
                                           'pod_ratio': pod_ratio,
                                           'username': username,
                                           'service_list': service_list})
+
+def pod(request):
+    mgr = manager()
+    username = request.POST.get('username', None)
+    node = mgr.getNode()
+    node_num = node['num']
+    pod = mgr.getPod()
+    pod_list = pod['pod_list']
+    pod_num = pod['num']
+    cpu_ratio = node['cpu_ratio']
+    mem_ratio = node['mem_ratio']
+    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    return render(request, 'pod.html', {'cpu_ratio': cpu_ratio,
+                                        'mem_ratio': mem_ratio,
+                                        'pod_ratio': pod_ratio,
+                                        'pod_list': pod_list,
+                                        'pod_num': pod_num,
+                                        'username': username,})
+
+
 
 def service(request):
     mgr = manager()

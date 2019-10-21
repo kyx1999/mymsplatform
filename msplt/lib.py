@@ -15,8 +15,24 @@ class manager(object):
     def getPod(self):
         print('Listing pods with their IPs')
         ret = self.core_v1.list_pod_for_all_namespaces(watch=False)
+        pod_list = []
+        count = 0
         for i in ret.items:
-            print("%s\t%s\t%s\t%s" % (i.status.pod_ip, i.metadata.namespace, i.metadata.name, i.metadata.creation_timestamp))
+            name = i.metadata.name
+            namespace = i.metadata.namespace
+            node = i.spec.node_name
+            create_time = i.metadata.creation_timestamp
+            phase = i.status.phase
+            pod_list.append({'name': name,
+                             'namespace': namespace,
+                             'node': node,
+                             'create_time': create_time,
+                             'phase': phase})
+            count += 1
+        return {'pod_list': pod_list, 'num': count}
+
+
+
         return {'dic': ret.items, 'num': len(ret.items)}
 
     def getNS(self):
@@ -45,7 +61,7 @@ class manager(object):
         print('Return Service list')
         ret = self.core_v1.list_service_for_all_namespaces()
         ret2 = self.core_v1.list_pod_for_all_namespaces()
-        service_list=[]
+        service_list = []
         count = 0
 
         for i in ret.items:
