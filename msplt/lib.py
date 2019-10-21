@@ -56,7 +56,8 @@ class manager(object):
             lasting_time = time.strftime('%H:%M:%S', present_time - create_time)
             cluster_ip = i.spec.cluster_ip
             selector_check = i.spec.selector
-            tag = i.metadata.name
+            name = i.metadata.name
+            tag = i.metadata.labels
             port = str(str(i.spec.ports.port) + ":" + str(i.spec.ports.protocal))
             target_port = i.spec.ports.target_port
             running_status = "正常"
@@ -69,6 +70,7 @@ class manager(object):
                                  'hostname': hostname,
                                  'time': lasting_time,
                                  'cluster_ip': cluster_ip,
+                                 'name': name,
                                  'tag': tag,
                                  'port': port,
                                  'target_port': target_port,
