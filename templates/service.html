@@ -82,9 +82,15 @@
                     <td>{{ serv.cluster_ip }}</td>
                     <td>{{ serv.port }}</td>
                     <td>{{ serv.target_port }}</td>
-                    <td>undone</td>
+                    {% if serv.running_status == "异常"%}
+                        <td style="color: orangered">{{ serv.running_status }}</td>
+                    {% else %}
+                        <td>{{ serv.running_status }}</td>
+                    {% endif %}
+
                     <td>{{ serv.time }}</td>
                   </tr>
+
                 {% endfor %}
                 </tbody>
               </table>
