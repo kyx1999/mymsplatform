@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.conf.urls import url
 from msplt import views
 
 urlpatterns = [
@@ -26,5 +27,8 @@ urlpatterns = [
     path('register', views.register, name='register'),
     path('index', views.index, name='index'),
     path('service', views.service, name='service'),
-    path('node', views.node, name='node')
+    path('node', views.node, name='node'),
+    path('obtain',views.obtain,name='obtain')
+    # url(r'^admin/', admin.site.urls),
+    # url(r'^obtain', views.obtain)
 ]
