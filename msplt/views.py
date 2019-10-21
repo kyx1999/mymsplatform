@@ -5,11 +5,12 @@ from django.contrib import messages
 from msplt import models
 from msplt.lib import manager
 
+
 # Create your views here.
 
-#获取节点cpu和mem
+# 获取节点cpu和mem
 def obtain(request):
-    request.encoding='utf-8'
+    request.encoding = 'utf-8'
     print('Return the number of node')
     file = open('describenode.txt', 'w')
     config.load_kube_config('./.kube/config')
@@ -18,8 +19,8 @@ def obtain(request):
     # print(ret, file=file)
     # return len(ret.items)
 
-    all_cpu = ret.items[0].status.allocatable['cpu']   #空载情况下cpu(资源配置相同情况下)
-    all_mem = ret.items[0].status.allocatable['memory']    #空载情况下memory
+    all_cpu = ret.items[0].status.allocatable['cpu']  # 空载情况下cpu(资源配置相同情况下)
+    all_mem = ret.items[0].status.allocatable['memory']  # 空载情况下memory
     node_list = [{'id': 'total',
                   'cpu': all_cpu,
                   'mem': all_mem}]
@@ -39,11 +40,13 @@ def obtain(request):
         node_list.append({'id': ip,
                           'cpu': allocatable_cpu,
                           'mem': allocatable_mem})
-    if 'q' in request.GET and request.GET['q']:
-        message = node_list
-    else:
-        message = 'Error!'
+    # if 'q' in request.GET and request.GET['q']:
+    #     message = node_list
+    # else:
+    #     message = 'Error!'
+    message = node_list
     return HttpResponse(message)
+
 
 def index(request):
     mgr = manager()
@@ -64,7 +67,7 @@ def index(request):
     cpu_ratio = node['cpu_ratio']
     mem_ratio = node['mem_ratio']
     deployment_num = deployment['num']
-    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    pod_ratio = int((1 - pod_num / (node_num * 110)) * 100)
     print(cpu_ratio)
     print(mem_ratio)
     return render(request, 'index.html', {'node_num': node_num,
@@ -78,6 +81,7 @@ def index(request):
                                           'pod_ratio': pod_ratio,
                                           'username': username,
                                           'service_list': service_list})
+
 
 def service(request):
     mgr = manager()
@@ -98,19 +102,20 @@ def service(request):
     cpu_ratio = node['cpu_ratio']
     mem_ratio = node['mem_ratio']
     deployment_num = deployment['num']
-    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    pod_ratio = int((1 - pod_num / (node_num * 110)) * 100)
     print(cpu_ratio)
     print(mem_ratio)
     return render(request, 'service.html', {'node_num': node_num,
-                                          'ns_num': ns_num,
-                                          'service_num': service_num,
-                                          'pod_num': pod_num,
-                                          'deployment_num': deployment_num,
-                                          'node_list': node_list,
-                                          'cpu_ratio': cpu_ratio,
-                                          'mem_ratio': mem_ratio,
-                                          'pod_ratio': pod_ratio,
-                                          'service_list': service_list})
+                                            'ns_num': ns_num,
+                                            'service_num': service_num,
+                                            'pod_num': pod_num,
+                                            'deployment_num': deployment_num,
+                                            'node_list': node_list,
+                                            'cpu_ratio': cpu_ratio,
+                                            'mem_ratio': mem_ratio,
+                                            'pod_ratio': pod_ratio,
+                                            'service_list': service_list})
+
 
 def node(request):
     mgr = manager()
@@ -130,19 +135,20 @@ def node(request):
     cpu_ratio = node['cpu_ratio']
     mem_ratio = node['mem_ratio']
     deployment_num = deployment['num']
-    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    pod_ratio = int((1 - pod_num / (node_num * 110)) * 100)
     print(cpu_ratio)
     print(mem_ratio)
     return render(request, 'node.html', {'node_num': node_num,
-                                          'ns_num': ns_num,
-                                          'service_num': service_num,
-                                          'pod_num': pod_num,
-                                          'deployment_num': deployment_num,
-                                          'node_list': node_list,
-                                          'cpu_ratio': cpu_ratio,
-                                          'mem_ratio': mem_ratio,
+                                         'ns_num': ns_num,
+                                         'service_num': service_num,
+                                         'pod_num': pod_num,
+                                         'deployment_num': deployment_num,
+                                         'node_list': node_list,
+                                         'cpu_ratio': cpu_ratio,
+                                         'mem_ratio': mem_ratio,
                                          'pod_ratio': pod_ratio,
                                          })
+
 
 def login(request):
     if request.method == 'POST':
@@ -162,6 +168,7 @@ def login(request):
             return render(request, 'login.html', {"message": message})
     return render(request, 'login.html')
 
+
 def register(request):
     if request.method == 'POST':
         message = '请检查填写的内容！'
@@ -171,7 +178,7 @@ def register(request):
         email = request.POST.get('email', None)
         if username is None:
             return render(request, 'login.html', {"message": message, "signup": True})
-        if password1 !=password2:
+        if password1 != password2:
             message = '两次输入密码不同！'
             return render(request, 'login.html', {"message": message, "signup": True})
         else:
