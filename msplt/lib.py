@@ -63,7 +63,7 @@ class manager(object):
             running_status = "正常"
 
             for m in ret2.items:
-                if m.metadata.labels == selector_check and (m.status.conditions.phase == "Failed" or m.status.conditions.phase == "Unknown"):
+                if m.metadata.labels == selector_check and (m.status.phase == "Failed" or m.status.phase == "Unknown"):
                     running_status = "异常"
 
             service_list.append({'ip': ip,
