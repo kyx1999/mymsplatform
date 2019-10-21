@@ -7,6 +7,43 @@ from msplt.lib import manager
 
 # Create your views here.
 
+#获取节点cpu和mem
+def obtain(request):
+    request.encoding='utf-8'
+    print('Return the number of node')
+    file = open('describenode.txt', 'w')
+    config.load_kube_config('./.kube/config')
+    v1 = client.CoreV1Api()
+    ret = v1.list_node(pretty=True)
+    # print(ret, file=file)
+    # return len(ret.items)
+
+    all_cpu = ret.items[0].status.allocatable['cpu']   #空载情况下cpu(资源配置相同情况下)
+    all_mem = ret.items[0].status.allocatable['memory']    #空载情况下memory
+    node_list = [{'id': 'total',
+                  'cpu': all_cpu,
+                  'mem': all_mem}]
+    capacity_cpu_sum = 0
+    allocatable_cpu_sum = 0
+    capacity_mem_sum = 0
+    allocatable_mem_sum = 0
+    for i in ret.items:
+        ip = i.status.addresses[0].address
+        name = i.status.addresses[1].address
+        allocatable_cpu = i.status.allocatable['cpu']
+        allocatable_mem = i.status.allocatable['memory']
+        allocatable_mem_ = allocatable_mem[:-2]
+        print(int(allocatable_mem_) / 1024 / 1024)
+        capacity_cpu = i.status.capacity['cpu']
+        capacity_mem = i.status.capacity['memory']
+        node_list.append({'id': ip,
+                          'cpu': allocatable_cpu,
+                          'mem': allocatable_mem})
+    if 'q' in request.GET and request.GET['q']:
+        message = node_list
+    else:
+        message = 'Error!'
+    return HttpResponse(message)
 
 def index(request):
     mgr = manager()
