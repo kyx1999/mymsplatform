@@ -2,6 +2,7 @@ import kubernetes.client
 from kubernetes.client.rest import ApiException
 from pprint import pprint
 from kubernetes import client, config, watch
+import time
 
 
 class manager(object):
@@ -47,9 +48,11 @@ class manager(object):
         count = 0
 
         for i in ret.items:
-            ip = i.status.addresses[0].address
-            name = i.status.addresses[1].address
-            time = i.metadata.creation_timestamp
+            ip = i.status.load_balancer.ingress.ip
+            hostname = i.status.load_balancer.ingress.hostname
+            create_time = time.strftime('%H:%M:%S', i.metadata.creation_timestamp)
+            present_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
+            time = time.strftime('%H:%M:%S', present_time - create_time)
             cluster_ip = i.spec.cluster_ip
             tag = i.metadata.name
             port = str(str(i.spec.ports.port) + ":" + str(i.spec.ports.protocal))
@@ -57,7 +60,7 @@ class manager(object):
 
 
             service_list.append({'ip': ip,
-                                 'name': name,
+                                 'hostname': hostname,
                                  'time': time,
                                  'cluster_ip': cluster_ip,
                                  'tag': tag,
