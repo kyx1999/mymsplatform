@@ -52,8 +52,8 @@ class manager(object):
             time = i.metadata.creation_timestamp
             cluster_ip = i.spec.cluster_ip
             tag = i.metadata.name
-            port = str(str(i.spec.port) + ":" + str(i.spec.protocal))
-            target_port = i.spec.targetPort
+            port = str(str(i.spec.ports.port) + ":" + str(i.spec.ports.protocal))
+            target_port = i.spec.ports.target_port
 
 
             service_list.append({'ip': ip,
