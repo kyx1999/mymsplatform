@@ -6,7 +6,8 @@ from kubernetes import client, config, watch
 
 class manager(object):
     def __init__(self):
-        config.load_kube_config('E:/pythonProject/test/resource/config')
+        # config.load_kube_config('E:/pythonProject/test/resource/config')
+        config.load_kube_config('./.kube/config')
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
 
@@ -38,6 +39,33 @@ class manager(object):
         #     print("%s\t%s\t%s\t%s" % ())
         return {'dic': ret.items, 'num': len(ret.items)}
         pass
+
+    def getService_2(self):
+        print('Return Service list')
+        ret = self.core_v1.list_service_for_all_namespaces()
+        service_list=[]
+        count = 0
+
+        for i in ret.items:
+            ip = i.status.addresses[0].address
+            name = i.status.addresses[1].address
+            time = i.metadata.creation_timestamp
+            cluster_ip = i.spec.cluster_ip
+            tag = i.metadata.name
+            port = str(str(i.spec.port) + ":" + str(i.spec.protocal))
+            target_port = i.spec.targetPort
+
+
+            service_list.append({'ip': ip,
+                                 'name': name,
+                                 'time': time,
+                                 'cluster_ip': cluster_ip,
+                                 'tag': tag,
+                                 'port': port,
+                                 'target_port': target_port})
+            count += 1
+        return {'service_list': service_list, 'num': count}
+
 
     def getNode(self):
         print('Return the number of node')

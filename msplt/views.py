@@ -13,7 +13,8 @@ def index(request):
     username = request.POST.get('username', None)
     node = mgr.getNode()
     ns = mgr.getNS()
-    service = mgr.getService()
+    service = mgr.getService_2()
+    service_list = service['service_list']
     pod = mgr.getPod()
     deployment = mgr.getDeployment()
     # print(node)
@@ -38,14 +39,16 @@ def index(request):
                                           'cpu_ratio': cpu_ratio,
                                           'mem_ratio': mem_ratio,
                                           'pod_ratio': pod_ratio,
-                                          'username': username})
+                                          'username': username,
+                                          'service_list': service_list})
 
 def service(request):
     mgr = manager()
     # username = request.POST.get('username', None)
     node = mgr.getNode()
     ns = mgr.getNS()
-    service = mgr.getService()
+    service = mgr.getService_2()
+    service_list = service['service_list']
     pod = mgr.getPod()
     deployment = mgr.getDeployment()
     # print(node)
@@ -70,14 +73,14 @@ def service(request):
                                           'cpu_ratio': cpu_ratio,
                                           'mem_ratio': mem_ratio,
                                           'pod_ratio': pod_ratio,
-                                          })
+                                          'service_list': service_list})
 
 def node(request):
     mgr = manager()
     # username = request.POST.get('username', None)
     node = mgr.getNode()
     ns = mgr.getNS()
-    service = mgr.getService()
+    service = mgr.getService_2()
     pod = mgr.getPod()
     deployment = mgr.getDeployment()
     # print(node)

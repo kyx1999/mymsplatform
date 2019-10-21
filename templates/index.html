@@ -210,18 +210,24 @@
                     <th>集群IP</th>
                     <th>内部端点</th>
                     <th>外部端点</th>
+                      <th>运行状态</th>
+                      <th>运行时间</th>
                   </tr>
                 </thead>
 
 
                 <tbody>
+                  {% for serv in service_list %}
                   <tr>
-                    <td>kubernetes</td>
-                    <td></td>
-                    <td>10.96.0.1</td>
-                    <td>kubernetes:443 TCP </td>
-                    <td></td>
+                    <td>{{ serv.name }}</td>
+                    <td>{{ serv.tag }}</td>
+                    <td>{{ serv.cluster_ip }}</td>
+                    <td>{{ serv.port }}</td>
+                    <td>{{ serv.target_port }}</td>
+                    <td>undone</td>
+                    <td>{{ serv.time }}</td>
                   </tr>
+                {% endfor %}
                 </tbody>
 
               </table>

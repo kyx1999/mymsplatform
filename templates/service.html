@@ -23,7 +23,7 @@
                     <span class="chart" data-percent={{ cpu_ratio }}>cpu
 {#                    <span class="percent"></span>#}
                   </span>
-                     <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">CPU: &nbsp;&nbsp; {{ cpu_ratio }}%</span>
+                     <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">CPU: &nbsp;&nbsp;{{ cpu_ratio }}%</span>
                 </div>
                 <div class="col-xs-6" >
 {#                  <span class="chart" data-percent={{ mem_ratio }}>Mem#}
@@ -69,19 +69,23 @@
                     <th>内部端点</th>
                     <th>外部端点</th>
                       <th>运行状态</th>
+                      <th>运行时间</th>
                   </tr>
                 </thead>
 
 
                 <tbody>
+                 {% for serv in service_list %}
                   <tr>
-                    <td>kubernetes</td>
-                    <td></td>
-                    <td>10.96.0.1</td>
-                    <td>kubernetes:443 TCP </td>
-                    <td></td>
-                      <td>正常</td>
+                    <td>{{ serv.name }}</td>
+                    <td>{{ serv.tag }}</td>
+                    <td>{{ serv.cluster_ip }}</td>
+                    <td>{{ serv.port }}</td>
+                    <td>{{ serv.target_port }}</td>
+                    <td>undone</td>
+                    <td>{{ serv.time }}</td>
                   </tr>
+                {% endfor %}
                 </tbody>
               </table>
             </div>
