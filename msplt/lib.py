@@ -44,7 +44,7 @@ class manager(object):
     def getService_2(self):
         print('Return Service list')
         ret = self.core_v1.list_service_for_all_namespaces()
-        ret2 = self.core_v1.list_pod_for_all_namespaces
+        ret2 = self.core_v1.list_pod_for_all_namespaces()
         service_list=[]
         count = 0
 
