@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from msplt import models
 from msplt.lib import manager
+from kubernetes import client, config
 
 # Create your views here.
 
