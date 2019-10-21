@@ -2,7 +2,7 @@ import kubernetes.client
 from kubernetes.client.rest import ApiException
 from pprint import pprint
 from kubernetes import client, config, watch
-import time
+import time, datetime
 
 
 class manager(object):
@@ -44,28 +44,35 @@ class manager(object):
     def getService_2(self):
         print('Return Service list')
         ret = self.core_v1.list_service_for_all_namespaces()
+        ret2 = self.core_v1.list_node()
         service_list=[]
         count = 0
 
         for i in ret.items:
             ip = i.status.load_balancer.ingress.ip
             hostname = i.status.load_balancer.ingress.hostname
-            create_time = time.strftime('%H:%M:%S', i.metadata.creation_timestamp)
-            present_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
-            time = time.strftime('%H:%M:%S', present_time - create_time)
+            create_time = i.metadata.creation_timestamp
+            present_time = time.localtime(time.time())
+            lasting_time = time.strftime('%H:%M:%S', present_time - create_time)
             cluster_ip = i.spec.cluster_ip
+            selector_check = i.spec.selector
             tag = i.metadata.name
             port = str(str(i.spec.ports.port) + ":" + str(i.spec.ports.protocal))
             target_port = i.spec.ports.target_port
+            running_status = "正常"
 
+            for m in ret2.items:
+                if m.metadata.labels == selector_check and m.status.conditions.status is not True:
+                    running_status = "异常"
 
             service_list.append({'ip': ip,
                                  'hostname': hostname,
-                                 'time': time,
+                                 'time': lasting_time,
                                  'cluster_ip': cluster_ip,
                                  'tag': tag,
                                  'port': port,
-                                 'target_port': target_port})
+                                 'target_port': target_port,
+                                 'running_status': running_status})
             count += 1
         return {'service_list': service_list, 'num': count}
 
