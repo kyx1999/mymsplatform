@@ -293,6 +293,7 @@
                   <tr>
                     <th>名称</th>
                     <th>命名空间</th>
+                      <th>容器镜像</th>
                     <th>隶属节点</th>
                     <th>创建时间</th>
                     <th>运行状态</th>
@@ -305,6 +306,7 @@
                   <tr>
                     <td>{{ pod.name }}</td>
                     <td>{{ pod.namespace }}</td>
+                  <td>{{ pod.image }}</td>
                     <td>{{ pod.node }}</td>
                     <td>{{ pod.create_time }}</td>
                   {% if pod.phase == "Failed" or pod.phase == "Unknown" %}

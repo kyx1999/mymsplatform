@@ -23,17 +23,15 @@ class manager(object):
             node = i.spec.node_name
             create_time = i.metadata.creation_timestamp
             phase = i.status.phase
+            image = i.spec.containers.image
             pod_list.append({'name': name,
                              'namespace': namespace,
                              'node': node,
                              'create_time': create_time,
-                             'phase': phase})
+                             'phase': phase,
+                             'image': image})
             count += 1
         return {'pod_list': pod_list, 'num': count}
-
-
-
-        return {'dic': ret.items, 'num': len(ret.items)}
 
     def getNS(self):
         print('Listing NSs and return the number of NSs')
