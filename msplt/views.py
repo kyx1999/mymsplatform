@@ -57,7 +57,7 @@ def index(request):
     service = mgr.getService_2()
     service_list = service['service_list']
     pod = mgr.getPod()
-    deployment = mgr.getDeployment()
+    pod_list = pod['pod_list']
     # print(node)
     node_num = node['num']
     ns_num = ns['num']
@@ -68,9 +68,6 @@ def index(request):
     cpu_ratio = node['cpu_ratio']
     mem_ratio = node['mem_ratio']
 
-    pod_ratio = int((1-pod_num/(node_num*110))*100)
-
-    deployment_num = deployment['num']
     pod_ratio = int((1 - pod_num / (node_num * 110)) * 100)
 
     print(cpu_ratio)
@@ -84,7 +81,8 @@ def index(request):
                                           'mem_ratio': mem_ratio,
                                           'pod_ratio': pod_ratio,
                                           'username': username,
-                                          'service_list': service_list})
+                                          'service_list': service_list,
+                                          'pod_list': pod_list})
 
 
 def pod(request):
