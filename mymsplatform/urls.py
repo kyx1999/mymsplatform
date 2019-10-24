@@ -28,7 +28,8 @@ urlpatterns = [
     path('index', views.index, name='index'),
     path('service', views.service, name='service'),
     path('node', views.node, name='node'),
-    path('obtain',views.obtain,name='obtain')
+    path('obtain', views.obtain, name='obtain'),
+    path('upload', views.upload, name='upload')
     # url(r'^admin/', admin.site.urls),
     # url(r'^obtain', views.obtain)
 ]

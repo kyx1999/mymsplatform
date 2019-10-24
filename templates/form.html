@@ -130,9 +130,9 @@
 
               <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
                 <p>填入YAML或JSON文件内容，将指定资源部署到当前所选命名空间</p>
-                <form>
-
-                  <input type="file" data-role="magic-overlay" data-target="#pictureBtn"
+                <form  action="/upload" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                  <input type="file" name="file" data-role="magic-overlay" data-target="#pictureBtn"
                          data-edit="insertImage"/>
                   <br/>
                   <div class="ln_solid"></div>

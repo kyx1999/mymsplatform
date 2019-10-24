@@ -5,9 +5,31 @@ from django.contrib import messages
 from msplt import models
 from msplt.lib import manager
 from kubernetes import client, config
+import os
+
+
+# import json
+# from .forms import UploadFileForm, handle_uploaded_file
+
+
+# from django.forms import ModelForm
 
 
 # Create your views here.
+def upload(request):
+    if request.method == "POST":  # 请求方法为POST时，进行处理
+        my_file = request.FILES.get("file", None)  # 获取上传的文件，如果没有文件，则默认为None
+        print(my_file)
+        if not my_file:
+            return render(request, "form.html", {})
+        destination = open(os.path.join(".\\", my_file.name), 'wb+')  # 打开特定的文件进行二进制的写操作
+        for chunk in my_file.chunks():  # 分块写入文件
+            destination.write(chunk)
+        destination.close()
+        mgr = manager()
+        mgr.parse_creat()
+        return redirect('/index.html')
+
 
 # 获取节点cpu和mem
 def obtain(request):
@@ -95,14 +117,13 @@ def pod(request):
     pod_num = pod['num']
     cpu_ratio = node['cpu_ratio']
     mem_ratio = node['mem_ratio']
-    pod_ratio = int((1-pod_num/(node_num*110))*100)
+    pod_ratio = int((1 - pod_num / (node_num * 110)) * 100)
     return render(request, 'pod.html', {'cpu_ratio': cpu_ratio,
                                         'mem_ratio': mem_ratio,
                                         'pod_ratio': pod_ratio,
                                         'pod_list': pod_list,
                                         'pod_num': pod_num,
-                                        'username': username,})
-
+                                        'username': username, })
 
 
 def service(request):

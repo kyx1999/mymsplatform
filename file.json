@@ -1,0 +1,13 @@
+[
+    {
+        "fontFamily":"ABC",
+        "fontSize":12,
+        "BaseSettings":[1, 2, 3]
+    },
+    {
+        "fontFamily":"DEF",
+        "fontSize":22,
+        "BaseSettings":[4, 5, 6]
+
+    }
+]
