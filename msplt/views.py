@@ -60,7 +60,7 @@ def obtain(request):
         print(int(allocatable_mem_) / 1024 / 1024)
         capacity_cpu = i.status.capacity['cpu']
         capacity_mem = i.status.capacity['memory']
-        node_list.append({'id': ip,
+        node_list.append({'id': name,
                           'cpu': allocatable_cpu,
                           'mem': allocatable_mem})
     # if 'q' in request.GET and request.GET['q']:
