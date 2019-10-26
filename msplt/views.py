@@ -28,7 +28,7 @@ def upload(request):
         destination.close()
         mgr = manager()
         mgr.parse_creat()
-        return redirect('/index.html')
+    return redirect('/index.html')
 
 
 # 获取节点cpu和mem

@@ -10,7 +10,7 @@ from msplt import views
 class manager(object):
     def __init__(self):
         # config.load_kube_config('E:/pythonProject/test/resource/config')
-        config.load_kube_config('./.kube/config')
+        config.load_kube_config('./.kube/config')  # kubectl config view -- to find the config position to replace this line
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
 
