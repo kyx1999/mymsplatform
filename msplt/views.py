@@ -6,6 +6,9 @@ from msplt import models
 from msplt.lib import manager
 from kubernetes import client, config
 import os
+import datetime
+from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.db import SessionStore
 
 
 # import json
@@ -71,7 +74,22 @@ def obtain(request):
     return HttpResponse(message)
 
 
+def get_all_logged_in_users():
+    # 获取没有过期的session
+    sessions = Session.objects.filter(expire_date__gte=datetime.now())
+    uid_list = []
+    count = 0
+
+    # 获取session中的userid
+    for session in sessions:
+        data = session.get_decoded()
+        uid_list.append(data.get('_auth_user_id', None))
+        count += 1
+    return count
+
+
 def index(request):
+    user_num = get_all_logged_in_users()
     mgr = manager()
     username = request.POST.get('username', None)
     node = mgr.getNode()
@@ -104,7 +122,8 @@ def index(request):
                                           'pod_ratio': pod_ratio,
                                           'username': username,
                                           'service_list': service_list,
-                                          'pod_list': pod_list})
+                                          'pod_list': pod_list,
+                                          'user_num': user_num})
 
 
 def pod(request):
