@@ -19,13 +19,14 @@ from django.conf.urls import url
 from msplt import views
 
 urlpatterns = [
+    url(r'index', views.index),
     path('admin/', admin.site.urls),
     re_path(r'^.*\.html', views.gentella_html, name='gentella'),
     path('', views.login, name='default'),
     path('login', views.login, name='login'),
     # path('register',views.register, name='register'),
     path('register', views.register, name='register'),
-    path('index', views.index, name='index'),
+    # path('index', views.index, name='index'),
     path('service', views.service, name='service'),
     path('node', views.node, name='node'),
     path('obtain', views.obtain, name='obtain'),
