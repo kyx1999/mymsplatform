@@ -7,7 +7,9 @@ from msplt.lib import manager
 from kubernetes import client, config
 import os
 import datetime
+import time
 from django.contrib.sessions.models import Session
+from django.core.cache import cache
 from django.contrib.sessions.backends.db import SessionStore
 
 
@@ -32,6 +34,37 @@ def upload(request):
         mgr = manager()
         mgr.parse_creat()
     return redirect('/index.html')
+
+#
+# def get_all_logged_in_users():
+#     # 获取没有过期的session
+#     sessions = Session.objects.filter(expire_date__gte=datetime.now())
+#     uid_list = []
+#     count = 0
+#
+#     # 获取session中的userid
+#     for session in sessions:
+#         data = session.get_decoded()
+#         uid_list.append(data.get('_auth_user_id', None))
+#         count += 1
+#     return count
+#
+# #@accept_websocket
+# def get_user_list(request):
+#     if request.is_websocket():
+#         message = request.websocket.wait()
+#         while True:
+#             if message:
+#                 user_num = get_all_logged_in_users()
+#                 request.websocket.send(str(user_num))
+#                 time.sleep(10)
+
+# def get_online_count():
+#     online_ips = cache.get("online_ips", [])
+#     if online_ips:
+#         online_ips = cache.get_many(online_ips).keys()
+#         return len(online_ips)
+#     return 0
 
 
 # 获取节点cpu和mem
@@ -74,23 +107,11 @@ def obtain(request):
     return HttpResponse(message)
 
 
-def get_all_logged_in_users():
-    # 获取没有过期的session
-    sessions = Session.objects.filter(expire_date__gte=datetime.now())
-    uid_list = []
-    count = 0
-
-    # 获取session中的userid
-    for session in sessions:
-        data = session.get_decoded()
-        uid_list.append(data.get('_auth_user_id', None))
-        count += 1
-    return count
-
 
 def index(request):
-    user_num = get_all_logged_in_users()
     mgr = manager()
+    # get_user_list()
+    user_num = mgr.get_all_logged_in_users()
     username = request.POST.get('username', None)
     node = mgr.getNode()
     ns = mgr.getNS()

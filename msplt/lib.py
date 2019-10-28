@@ -4,7 +4,9 @@ from pprint import pprint
 from kubernetes import client, config, watch
 import time, datetime
 import json
-from msplt import views
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from django.utils import timezone
 
 
 class manager(object):
@@ -13,6 +15,20 @@ class manager(object):
         config.load_kube_config('./.kube/config')  # kubectl config view -- to find the config position to replace this line
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
+
+    def get_all_logged_in_users(self):
+        # Query all non-expired sessions
+        # use timezone.now() instead of datetime.now() in latest versions of Django
+        sessions = Session.objects.filter(expire_date__gte=timezone.now())
+        uid_list = []
+        # Build a list of user ids from that query
+        for session in sessions:
+            data = session.get_decoded()
+            uid_list.append(data.get('_auth_user_id', None))
+        # Query all logged in users based on id list
+        if len(User.objects.filter(id__in=uid_list)) == 0:
+            return 0
+        return len(User.objects.filter(id__in=uid_list))
 
     def parse_creat(self):
         data = json.load('.\\file.json')
@@ -50,6 +66,8 @@ class manager(object):
                              'image': image})
             count += 1
         return {'pod_list': pod_list, 'num': count}
+
+
 
     def getNS(self):
         print('Listing NSs and return the number of NSs')

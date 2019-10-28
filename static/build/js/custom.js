@@ -53,6 +53,20 @@ var CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
     $NAV_MENU = $('.nav_menu'),
     $FOOTER = $('footer');
 
+// var socket = new WebSocket("ws:" + window.location.host + "/msplt/views.py");
+// socket.onopen = function () {
+//     console.log('WebSocket open');//成功连接上Websocket
+//     socket.send('adasdasda。。。。');//发送数据到服务端
+// };
+// socket.onmessage = function (e) {
+//     $('#online_number').text(e.data)
+// };
+// socket.onclose = function (e) {
+//     console.log(e);
+//     socket.close(); //关闭TCP连接
+// };
+// if (socket.readyState == WebSocket.OPEN) socket.onopen();
+
 
 // Sidebar
 function init_sidebar() {
