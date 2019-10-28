@@ -7,12 +7,13 @@ import json
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+from datetime import datetime
 
 
 class manager(object):
     def __init__(self):
         # config.load_kube_config('E:/pythonProject/test/resource/config')
-        config.load_kube_config('./.kube/config')  # kubectl config view -- to find the config position to replace this line
+        config.load_kube_config('~/.kube/config')  # kubectl config view -- to find the config position to replace this line
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
 
@@ -100,11 +101,14 @@ class manager(object):
         count = 0
 
         for i in ret.items:
-            ip = i.status.load_balancer.ingress.ip
-            hostname = i.status.load_balancer.ingress.hostname
+            # ip = i.status.load_balancer.ingress.ip
+            # hostname = i.status.load_balancer.ingress.hostname
+            # create_time = i.metadata.creation_timestamp
+            # present_time = time.localtime(time.time())
+            # lasting_time = time.strftime('%H:%M:%S', present_time - create_time)
             create_time = i.metadata.creation_timestamp
-            present_time = time.localtime(time.time())
-            lasting_time = time.strftime('%H:%M:%S', present_time - create_time)
+            present_time = datetime.now()
+            lasting_time = datetime.timedelta(present_time, create_time)
             cluster_ip = i.spec.cluster_ip
             selector_check = i.spec.selector
             name = i.metadata.name
