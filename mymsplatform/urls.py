@@ -20,17 +20,20 @@ from msplt import views
 
 urlpatterns = [
     url(r'index', views.index),
+    url(r'service', views.service),
+    url(r'node', views.node),
+    url(r'pod', views.pod),
+    url(r'upload', views.upload),
     path('admin/', admin.site.urls),
     re_path(r'^.*\.html', views.gentella_html, name='gentella'),
     path('', views.login, name='default'),
     path('login', views.login, name='login'),
-    # path('register',views.register, name='register'),
-    path('register', views.register, name='register'),
-    # path('index', views.index, name='index'),
-    path('service', views.service, name='service'),
-    path('node', views.node, name='node'),
     path('obtain', views.obtain, name='obtain'),
-    path('upload', views.upload, name='upload')
+    # path('register',views.register, name='register'),
+    # path('index', views.index, name='index'),
+    # path('service', views.service, name='service'),
+    # path('node', views.node, name='node'),
+    # path('upload', views.upload, name='upload')
     # url(r'^admin/', admin.site.urls),
     # url(r'^obtain', views.obtain)
 ]

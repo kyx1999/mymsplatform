@@ -2,18 +2,19 @@ import kubernetes.client
 from kubernetes.client.rest import ApiException
 from pprint import pprint
 from kubernetes import client, config, watch
-import time, datetime
+import time
 import json
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 from datetime import datetime
-
+from datetime import timedelta
 
 class manager(object):
     def __init__(self):
         # config.load_kube_config('E:/pythonProject/test/resource/config')
-        config.load_kube_config('~/.kube/config')  # kubectl config view -- to find the config position to replace this line
+        config.load_kube_config(
+            '~/.kube/config')  # kubectl config view -- to find the config position to replace this line
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
 
@@ -58,7 +59,7 @@ class manager(object):
             node = i.spec.node_name
             create_time = i.metadata.creation_timestamp
             phase = i.status.phase
-            image = i.spec.containers.image
+            image = i.spec.containers[0].image
             pod_list.append({'name': name,
                              'namespace': namespace,
                              'node': node,
@@ -67,8 +68,6 @@ class manager(object):
                              'image': image})
             count += 1
         return {'pod_list': pod_list, 'num': count}
-
-
 
     def getNS(self):
         print('Listing NSs and return the number of NSs')
@@ -106,30 +105,34 @@ class manager(object):
             # create_time = i.metadata.creation_timestamp
             # present_time = time.localtime(time.time())
             # lasting_time = time.strftime('%H:%M:%S', present_time - create_time)
-            create_time = i.metadata.creation_timestamp
-            present_time = datetime.now()
-            lasting_time = datetime.timedelta(present_time, create_time)
+            create_time = i.metadata.creation_timestamp.strftime('%Y-%m-%d %H:%M:%S')
+            present_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            create_time = time.mktime(time.strptime(create_time, "%Y-%m-%d %H:%M:%S"))
+            present_time = time.mktime(time.strptime(present_time, "%Y-%m-%d %H:%M:%S"))
+            lasting_time = time.strftime('%H:%M:%S', time.localtime(present_time - create_time))
+            # lasting_time = datetime.timedelta(present_time, create_time)
             cluster_ip = i.spec.cluster_ip
             selector_check = i.spec.selector
             name = i.metadata.name
             tag = i.metadata.labels
-            port = str(str(i.spec.ports.port) + ":" + str(i.spec.ports.protocal))
-            target_port = i.spec.ports.target_port
+            port = str(str(i.spec.ports[0].port) + ":" + str(i.spec.ports[0].protocol))
+            target_port = i.spec.ports[0].target_port
             running_status = "正常"
 
             for m in ret2.items:
                 if m.metadata.labels == selector_check and (m.status.phase == "Failed" or m.status.phase == "Unknown"):
                     running_status = "异常"
 
-            service_list.append({'ip': ip,
-                                 'hostname': hostname,
-                                 'time': lasting_time,
-                                 'cluster_ip': cluster_ip,
-                                 'name': name,
-                                 'tag': tag,
-                                 'port': port,
-                                 'target_port': target_port,
-                                 'running_status': running_status})
+            service_list.append({
+                # 'ip': ip,
+                # 'hostname': hostname,
+                'time': lasting_time,
+                'cluster_ip': cluster_ip,
+                'name': name,
+                'tag': tag,
+                'port': port,
+                'target_port': target_port,
+                'running_status': running_status})
             count += 1
         return {'service_list': service_list, 'num': count}
 
