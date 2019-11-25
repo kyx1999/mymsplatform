@@ -57,6 +57,7 @@
                         <tr>
                             <th>名称</th>
                             <th>IP</th>
+                            <th>服务列表</th>
                             <th>可分配CPU(核)</th>
                             <th>总CPU(核)</th>
                             <th>可分配内存(Gi)</th>
@@ -70,6 +71,7 @@
                             <tr>
                                 <td>{{ node.name }}</td>
                                 <td>{{ node.ip }}</td>
+                                <td>{{ node.service_name }}</td>
                                 <td>{{ node.allocatable_cpu }}</td>
                                 <td>{{ node.capacity_cpu }}</td>
                                 <td>{{ node.allocatable_mem }}</td>
