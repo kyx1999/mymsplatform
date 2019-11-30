@@ -37,22 +37,24 @@ class manager(object):
 
     def parse_creat(self):
         data = json.load(open("file.json","r"))
-        pod_list = self.core_v1.list_pod_for_all_namespaces()
-        print(pod_list)
-        for i in pod_list.items():
-            if (i.status.phase is "Failed") or (i.status.phase is "Unknown"):
-                ns = i.metadata.namespace
-                nm = i.metadata.name
-                pod_new = self.core_v1.read_namespaced_pod(nm, ns)  # V1Pod
-                print("pod_new: " + pod_new)
-                for j in pod_new.status.container_statuses.items:
-                    for d in data.items:
-                        if j.image == d['name']:
-                            for k in d['nodes']:
-                                pod_new.spec.node_name = k
-                                pod_new.spec.node_selector = self.core_v1.read_node(k).metadata.labels
-                                pod_create = self.core_v1.create_namespaced_pod(ns, pod_new)
-                                print("creat pod: " + pod_create)
+        print(data)
+        pod_list = self.core_v1.list_pod_for_all_namespaces(watch=False)
+        for i in pod_list.items:
+
+            # if i.status.phase == "Failed" or i.status.phase == "Unknown":
+            # if i.metadata.namespace == "kube-system" and i.metadata.name == "kube-scheduler-k8s-master":
+            ns = i.metadata.namespace
+            nm = i.metadata.name
+            pod_new = self.core_v1.read_namespaced_pod(nm, ns)  # V1Pod
+            # print(pod_new.metadata.namespace)
+            for j in pod_new.status.container_statuses:
+                print(j)
+                for d in data:
+                    if j.image == d['name']:
+                        for k in d['node']:
+                            pod_new.spec.node_name = k
+                            pod_new.spec.node_selector = self.core_v1.read_node(k).metadata.labels
+                            pod_create = self.core_v1.create_namespaced_pod(ns, pod_new)
 
 
     def thread_scale(self):
