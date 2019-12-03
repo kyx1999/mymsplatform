@@ -179,6 +179,7 @@ def node(request):
     node = mgr.getNode()
     ns = mgr.getNS()
     service = mgr.getService_2()
+    service_list = service['service_list']
     pod = mgr.getPod()
     deployment = mgr.getDeployment()
     # print(node)
@@ -202,7 +203,8 @@ def node(request):
                                          'node_list': node_list,
                                          'cpu_ratio': cpu_ratio,
                                          'mem_ratio': mem_ratio,
-                                         'pod_ratio': pod_ratio
+                                         'pod_ratio': pod_ratio,
+                                         'service_list': service_list
                                          })
 
 
