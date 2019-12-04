@@ -35,26 +35,39 @@ class manager(object):
             return 0
         return len(User.objects.filter(id__in=uid_list))
 
-    def parse_creat(self):
-        data = json.load(open("file.json","r"))
-        print(data)
-        pod_list = self.core_v1.list_pod_for_all_namespaces(watch=False)
-        for i in pod_list.items:
+    # def parse_creat(self):
+    #     data = json.load(open("file.json","r"))
+    #     print(data)
+    #     pod_list = self.core_v1.list_pod_for_all_namespaces(watch=False)
+    #     for i in pod_list.items:
+    #
+    #         # if i.status.phase == "Failed" or i.status.phase == "Unknown":
+    #         # if i.metadata.namespace == "kube-system" and i.metadata.name == "kube-scheduler-k8s-master":
+    #         ns = i.metadata.namespace
+    #         nm = i.metadata.name
+    #         pod_new = self.core_v1.read_namespaced_pod(nm, ns)  # V1Pod
+    #         # print(pod_new.metadata.namespace)
+    #         for j in pod_new.status.container_statuses:
+    #             print(j)
+    #             for d in data:
+    #                 if j.image == d['name']:
+    #                     for k in d['node']:
+    #                         pod_new.spec.node_name = k
+    #                         pod_new.spec.node_selector = self.core_v1.read_node(k).metadata.labels
+    #                         pod_create = self.core_v1.create_namespaced_pod(ns, pod_new)
 
-            # if i.status.phase == "Failed" or i.status.phase == "Unknown":
-            # if i.metadata.namespace == "kube-system" and i.metadata.name == "kube-scheduler-k8s-master":
-            ns = i.metadata.namespace
-            nm = i.metadata.name
-            pod_new = self.core_v1.read_namespaced_pod(nm, ns)  # V1Pod
-            # print(pod_new.metadata.namespace)
-            for j in pod_new.status.container_statuses:
-                print(j)
-                for d in data:
-                    if j.image == d['name']:
-                        for k in d['node']:
-                            pod_new.spec.node_name = k
-                            pod_new.spec.node_selector = self.core_v1.read_node(k).metadata.labels
-                            pod_create = self.core_v1.create_namespaced_pod(ns, pod_new)
+    def parse_creat(self):
+        data = json.load(open("file.json", "r"))
+        for i in data:
+            pod = client.V1Pod(labels={"app": "server"})
+            pod.metadata = client.V1ObjectMeta(name=str("server" + "-" + str(123456)))
+            container = client.V1Container(image="server", name="server")
+            spec = client.V1PodSpec(containers=[container])
+            # spec.containers = [container]
+            for node_name in i["nodes"]:
+                spec.node_name = node_name
+                pod.spec = spec
+                self.core_v1.create_namespaced_pod(namespace="default", body=pod)
 
 
     def thread_scale(self):
