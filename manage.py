@@ -2,6 +2,12 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import threading
+import time
+
+from kubernetes import client
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 def main():
@@ -17,5 +23,17 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+def create_thread():
+    while True:
+        v1 = client.CoreV1Api()
+        pod_list = v1.list_pod_for_all_namespaces()
+        for i in pod_list.items:
+            if i.status.phase is "Failed" or i.status.phase is "Unknown":
+                messages.warning(request="有任务处于异常！")
+                return redirect('/index.html')
+
+
 if __name__ == '__main__':
+    t = threading.Thread(target=create_thread)
+    t.start()
     main()
