@@ -1,3 +1,5 @@
+import threading
+
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
@@ -6,10 +8,13 @@ from msplt import models
 from msplt.lib import manager
 from kubernetes import client, config
 import os
+import datetime
+import time
+from django.contrib.sessions.models import Session
+from django.core.cache import cache
+from django.contrib.sessions.backends.db import SessionStore
 
-
-
-import json
+# import json
 # from .forms import UploadFileForm, handle_uploaded_file
 
 
@@ -17,14 +22,30 @@ import json
 
 
 # Create your views here.
+from mymsplatform.settings import BASE_DIR
+
+
+def create_thread(request):
+    while True:
+        config.load_kube_config('~/.kube/config')
+        v1 = client.CoreV1Api()
+        pod_list = v1.list_pod_for_all_namespaces()
+        for i in pod_list.items:
+            if i.status.phase == "Failed" or i.status.phase == "Unknown" or i.status.phase == "Pending":
+                print(i.status.phase)
+                # messages.add_message(request, messages.INFO, 'Hello world.')
+                # messages.warning(request="有任务处于异常！")
+                messages.success(request, "有任务处于异常！")
+                return redirect('/index.html')
+
+
 def upload(request):
     if request.method == "POST":  # 请求方法为POST时，进行处理
         my_file = request.FILES.get("file", None)  # 获取上传的文件，如果没有文件，则默认为None
         print(my_file)
         if not my_file:
-            HttpResponse("Upload file failed !")
             return render(request, "form.html", {})
-        destination = open(os.path.join(my_file.name), 'w+')  # 打开特定的文件进行读写操作
+        destination = open(os.path.join(my_file.name), 'wb+')  # 打开特定的文件进行二进制的写操作
         for chunk in my_file.chunks():  # 分块写入文件
             destination.write(chunk)
         destination.close()
@@ -33,10 +54,36 @@ def upload(request):
     return redirect('/index.html')
 
 
-def get_post_json(request):
-    if request.method == 'POST':
-        req = json.loads(request.body)
-        return req
+#
+# def get_all_logged_in_users():
+#     # 获取没有过期的session
+#     sessions = Session.objects.filter(expire_date__gte=datetime.now())
+#     uid_list = []
+#     count = 0
+#
+#     # 获取session中的userid
+#     for session in sessions:
+#         data = session.get_decoded()
+#         uid_list.append(data.get('_auth_user_id', None))
+#         count += 1
+#     return count
+#
+# #@accept_websocket
+# def get_user_list(request):
+#     if request.is_websocket():
+#         message = request.websocket.wait()
+#         while True:
+#             if message:
+#                 user_num = get_all_logged_in_users()
+#                 request.websocket.send(str(user_num))
+#                 time.sleep(10)
+
+# def get_online_count():
+#     online_ips = cache.get("online_ips", [])
+#     if online_ips:
+#         online_ips = cache.get_many(online_ips).keys()
+#         return len(online_ips)
+#     return 0
 
 
 # 获取节点cpu和mem
@@ -79,8 +126,9 @@ def obtain(request):
     return HttpResponse(message)
 
 
-
 def index(request):
+    t = threading.Thread(target=create_thread, args=(request,))
+    t.start()
     mgr = manager()
     # get_user_list()
     user_num = mgr.get_all_logged_in_users()
@@ -103,8 +151,9 @@ def index(request):
 
     pod_ratio = int((1 - pod_num / (node_num * 110)) * 100)
 
-    print(cpu_ratio)
-    print(mem_ratio)
+    # print(cpu_ratio)
+    # print(mem_ratio)
+    # print(service_list)
     return render(request, 'index.html', {'node_num': node_num,
                                           'ns_num': ns_num,
                                           'service_num': service_num,
@@ -116,8 +165,7 @@ def index(request):
                                           'username': username,
                                           'service_list': service_list,
                                           'pod_list': pod_list,
-                                          'user_num': user_num
-                                          })
+                                          'user_num': user_num})
 
 
 def pod(request):

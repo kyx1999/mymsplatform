@@ -9,18 +9,159 @@
     <link href="/static/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/sweetalert/sweetalert.css">
+<style>
+    /* 触发弹窗图片的样式 */
+    #myImg {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    #myImg:hover {opacity: 0.7;}
+
+    /* 弹窗背景 */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+    }
+
+    /* 图片 */
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    /* 文本内容 */
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    /* 添加动画 */
+    .modal-content, #caption {
+        -webkit-animation-name: zoom;
+        -webkit-animation-duration: 0.6s;
+        animation-name: zoom;
+        animation-duration: 0.6s;
+    }
+
+    @-webkit-keyframes zoom {
+        from {-webkit-transform:scale(0)}
+        to {-webkit-transform:scale(1)}
+    }
+
+    @keyframes zoom {
+        from {transform:scale(0)}
+        to {transform:scale(1)}
+    }
+
+    /* 关闭按钮 */
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* 小屏幕中图片宽度为 100% */
+    @media only screen and (max-width: 700px){
+        .modal-content {
+            width: 100%;
+        }
+    }
+</style>
 {% endblock stylesheets %}
 
 {% block content %}
+
+
     <div class="right_col" role="main">
-
-
         <div class="row">
             <div class="col-md-offset-1" style="margin-left: 5%; display: inline-block;line-height: 48px;color:darkgrey;font-size: 20px;">
                 当前在线人数：
 {#                <span id="online_number" style="font-size: 25px;color: #2c2c2c;font-family: 'Arial' ">#}
                     {{ user_num }}
 {#                </span>#}
+
+
+            </div>
+            <button onclick="myClick()" id="my" style="float:right; display: none" class="btn btn-warning">重部署</button>
+            <button onclick="serverClick()" id="myImg" style="float:right; display: none" src="https://c.runoob.com/wp-content/uploads/2017/01/btotbhpudiagtmvlkyrs.jpg" alt="文本描述信息" class="btn btn-success">显示重部署服务器任务图</button>
+
+            <!-- 弹窗 -->
+            <div id="myModal" class="modal">
+
+              <!-- 关闭按钮 -->
+              <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span>
+
+              <!-- 弹窗内容 -->
+              <img class="modal-content" id="img01">
+
+              <!-- 文本描述 -->
+              <div id="caption"></div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12" id="list" style="display: none">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>重部署服务器资源列表 </h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>服务器编号</th>
+                                <th>可用CPU资源</th>
+                                <th>可用RAM资源</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for node in node_list %}
+                                <tr>
+                                    <td>3</td>
+                                    <td>800</td>
+                                    <td>100</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
 
@@ -40,25 +181,18 @@
                                 <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">MEM: &nbsp;&nbsp; {{ mem_ratio }}%</span>
 
                             </div>
-{#                            <div class="col-xs-4">#}
-{#                  <span class="chart" data-percent={{ pod_ratio }}>Pods#}
-{##}
-{#                  </span>#}
-{#                                <span style="font-weight: bold; margin-left: 5%; font-family: 'Adobe Caslon Pro Bold'; font-size: 35px">POD: &nbsp;&nbsp; {{ pod_ratio }}%</span>#}
-{#                            </div>#}
                             <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="row top_tiles">
+            <div class="col-md-12 col-sm-12 col-xs-12" style="position: absolute;top: 0;z-index: -1">
+                <div class="row">
                     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 25%">
                         <div class="tile-stats">
                             <div class="count" style="font-size: 30px">Nodes</div>
                             <h3>{{ node_num }}</h3>
-                            {#                            <h3>1</h3>#}
                         </div>
                     </div>
                     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 25%">
@@ -79,17 +213,8 @@
                         <div class="tile-stats">
                             <div class="count" style="font-size: 30px">Pods</div>
                             <h3>{{ pod_num }}</h3>
-{#                                                        <h3>4</h3>#}
                         </div>
                     </div>
-                    {#              <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" style="width: 20%">#}
-                    {#                  <div class="tile-stats">#}
-                    {#                      <div class="icon"><i class="fa fa-check-square-o"></i></div>#}
-                    {#                      <div class="count" style="font-size: 30px">Deployments</div>#}
-                    {#                      <h3>{{ deployment_num }}</h3>#}
-                    {#            <p>Lorem ipsum psdea itgum rixt.</p>#}
-                    {#                  </div>#}
-                    {#              </div>#}
                 </div>
             </div>
 
@@ -106,7 +231,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <table id="datatable" class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>名称</th>
@@ -131,17 +256,6 @@
                                     <td>{{ serv.time }}</td>
                                 </tr>
                             {% endfor %}
-
-                            {#                  <tr>#}
-                            {#                    <td>service1</td>#}
-                            {#                    <td>local-socker</td>#}
-                            {#                    <td>10.0.54.239</td>#}
-                            {#                    <td>80</td>#}
-                            {#                    <td>88</td>#}
-                            {#                    <td style="color: orangered">异常</td>#}
-                            {#                    <td>30M:21S</td>#}
-                            {#                </tr>#}
-
                             </tbody>
 
                         </table>
@@ -171,7 +285,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <table id="datatable" class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered">
                             <thead>
                             <tr>
                                 <th>名称</th>
@@ -297,6 +411,64 @@
                     </div>
                 </div>
             </div>
+
+            {% if messages %}
+                <script>
+                    {% for msg in messages %}
+                        alert('{{ msg.message }}');
+                        document.getElementById("list").style.display ='';
+                        document.getElementById("my").style.display ='';
+                        document.getElementById("myImg").style.display ='';
+                    {% endfor %}
+
+                    function myClick()
+                    {
+                        swal({
+                          title: "服务器3发生资源降级",
+                          text: "是否对该服务器进行重部署",
+                          type: "warning",
+                          showCancelButton: true,
+                          confirmButtonClass: "btn-info",
+                          confirmButtonText: "是，重部署!",
+                          cancelButtonText: "不，取消!",
+                          closeOnConfirm: false,
+                          closeOnCancel: false
+                        },
+                        function(isConfirm) {
+                          if (isConfirm) {
+                            swal("成功!", "产生重部署json文件file.json .", "success");
+                            document.getElementById("list").style.display ='none';
+                            document.getElementById("my").style.display ='none';
+                            document.getElementById("myImg").style.display ='none';
+                          } else {
+                            swal("取消", "您的操作已经取消", "error");
+                          }
+                        });
+                    }
+
+                    // 获取弹窗
+                    var modal = document.getElementById('myModal');
+
+                    // 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容
+                    var img = document.getElementById('myImg');
+                    var modalImg = document.getElementById("img01");
+                    var captionText = document.getElementById("caption");
+                    img.onclick = function(){
+                        modal.style.display = "block";
+<!--                        <img id="myImg" style="display:none" src="https://c.runoob.com/wp-content/uploads/2017/01/btotbhpudiagtmvlkyrs.jpg" alt="文本描述信息" width="300" height="200">-->
+                        modalImg.src = "/static/images/micro-service_graph.jpg";
+                        captionText.innerHTML = "重部署任务图";
+                    }
+
+                    // 获取 <span> 元素，设置关闭按钮
+                    var span = document.getElementsByClassName("close")[0];
+
+                    // 当点击 (x), 关闭弹窗
+                    span.onclick = function() {
+                      modal.style.display = "none";
+                    }
+                </script>
+            {% endif %}
 
             {#      <div class="col-md-12 col-sm-12 col-xs-12">#}
             {#        <div class="dashboard_graph">#}
@@ -914,4 +1086,6 @@
     <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
     <!-- easy-pie-chart -->
     <script src="/static/vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
+<!--    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
+    <script src="/static/sweetalert/sweetalert.min.js"></script>
 {% endblock javascripts %}

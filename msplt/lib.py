@@ -1,3 +1,5 @@
+import random
+
 import kubernetes.client
 from kubernetes.client.rest import ApiException
 from pprint import pprint
@@ -10,16 +12,15 @@ from django.utils import timezone
 from datetime import datetime
 from datetime import timedelta
 
+from mymsplatform.settings import BASE_DIR
+
+
 class manager(object):
     def __init__(self):
         # config.load_kube_config('E:/pythonProject/test/resource/config')
-        # config.load_kube_config(
-        #     '~/.kube/config')  # kubectl config view -- to find the config position to replace this line
-
+        config.load_kube_config('~/.kube/config')  # kubectl config view -- to find the config position to replace this line
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
-
-
 
     def get_all_logged_in_users(self):
         # Query all non-expired sessions
@@ -35,48 +36,35 @@ class manager(object):
             return 0
         return len(User.objects.filter(id__in=uid_list))
 
-    # def parse_creat(self):
-    #     data = json.load(open("file.json","r"))
-    #     print(data)
-    #     pod_list = self.core_v1.list_pod_for_all_namespaces(watch=False)
-    #     for i in pod_list.items:
-    #
-    #         # if i.status.phase == "Failed" or i.status.phase == "Unknown":
-    #         # if i.metadata.namespace == "kube-system" and i.metadata.name == "kube-scheduler-k8s-master":
-    #         ns = i.metadata.namespace
-    #         nm = i.metadata.name
-    #         pod_new = self.core_v1.read_namespaced_pod(nm, ns)  # V1Pod
-    #         # print(pod_new.metadata.namespace)
-    #         for j in pod_new.status.container_statuses:
-    #             print(j)
-    #             for d in data:
-    #                 if j.image == d['name']:
-    #                     for k in d['node']:
-    #                         pod_new.spec.node_name = k
-    #                         pod_new.spec.node_selector = self.core_v1.read_node(k).metadata.labels
-    #                         pod_create = self.core_v1.create_namespaced_pod(ns, pod_new)
+        # def parse_creat(self):
+        # data = json.load(open("file.json", "r"))
+        # for name, nodelist in data:
+        #     pod = client.V1Pod()
+        #     pod.metadata = client.V1ObjectMeta(name=(name + str(random.randint(0, 1000))))
+        #     container = client.V1Container(image=name, name=name)
+        #     container.image = name
+        #     container.name = name
+        #     spec = client.V1PodSpec()
+        #     spec.containers = [container]
+        #     for node_name in nodelist:
+        #         spec.node_name = node_name
+        #         pod.spec = spec
+        #         self.core_v1.create_namespaced_pod(namespace="default", body=pod)
 
     def parse_creat(self):
         data = json.load(open("file.json", "r"))
         for i in data:
-            pod = client.V1Pod(labels={"app": "server"})
-            pod.metadata = client.V1ObjectMeta(name=str("server" + "-" + str(123456)))
-            container = client.V1Container(image="server", name="server")
+            print(i["name"])
+            # pod = client.V1Pod(labels={"app": i["name"]})
+            pod = client.V1Pod()
+            pod.metadata = client.V1ObjectMeta(name=str(i["name"] + "-" + str(random.randint(1, 1000))))
+            container = client.V1Container(image=i["name"], name=i["name"])
             spec = client.V1PodSpec(containers=[container])
             # spec.containers = [container]
             for node_name in i["nodes"]:
                 spec.node_name = node_name
                 pod.spec = spec
                 self.core_v1.create_namespaced_pod(namespace="default", body=pod)
-
-
-    def thread_scale(self):
-        print("Running thread_scale func:")
-        w = watch.Watch()
-        for e in w.stream(self.core_v1.list_pod_for_all_namespaces, 'default'):
-            if e[]
-
-
 
     def getPod(self):
         print('Listing pods with their IPs')
@@ -96,6 +84,7 @@ class manager(object):
                              'create_time': create_time,
                              'phase': phase,
                              'image': image})
+            # pod_list.append({'phase': phase})
             count += 1
         return {'pod_list': pod_list, 'num': count}
 
@@ -150,7 +139,7 @@ class manager(object):
             running_status = "正常"
 
             for m in ret2.items:
-                if (m.metadata.labels == selector_check) and (m.status.phase is "Failed" or m.status.phase is "Unknown"):
+                if m.metadata.labels == selector_check and (m.status.phase == "Failed" or m.status.phase == "Unknown"):
                     running_status = "异常"
 
             service_list.append({
@@ -169,11 +158,6 @@ class manager(object):
     def getNode(self):
         print('Return the number of node')
         ret = self.core_v1.list_node()
-        service = self.getService_2()
-        service_list = service['service_list']
-        service_name = []
-        for i in service_list.items():
-            service_name.append(i.name)
         count = 0
         node_list = []
         capacity_cpu_sum = 0
@@ -200,7 +184,7 @@ class manager(object):
             count += 1
         cpu_ratio = int((allocatable_cpu_sum / capacity_cpu_sum) * 100)
         mem_ratio = int((allocatable_mem_sum / capacity_mem_sum) * 100)
-        return {'node_list': node_list, 'num': count, 'cpu_ratio': cpu_ratio, 'mem_ratio': mem_ratio, 'service_name': service_name}
+        return {'node_list': node_list, 'num': count, 'cpu_ratio': cpu_ratio, 'mem_ratio': mem_ratio}
 
     def createService(self, name, selector, service_port=None, namespace='default'):
         port = None
