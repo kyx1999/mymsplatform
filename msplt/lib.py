@@ -57,7 +57,8 @@ class manager(object):
             print(i["name"])
             # pod = client.V1Pod(labels={"app": i["name"]})
             pod = client.V1Pod()
-            pod.metadata = client.V1ObjectMeta(name=str(i["name"] + "-" + str(random.randint(1, 1000))))
+            pod.metadata = client.V1ObjectMeta(name=str(i["name"] + "-" + str(time.time())))
+            print(time.time())
             container = client.V1Container(image=i["name"], name=i["name"])
             spec = client.V1PodSpec(containers=[container])
             # spec.containers = [container]
