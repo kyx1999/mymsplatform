@@ -10,94 +10,94 @@
     <link href="/static/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="/static/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/static/sweetalert/sweetalert.css">
-<style>
-    /* 触发弹窗图片的样式 */
-    #myImg {
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+<!--<style>-->
+<!--    /* 触发弹窗图片的样式 */-->
+<!--    #myImg {-->
+<!--        border-radius: 5px;-->
+<!--        cursor: pointer;-->
+<!--        transition: 0.3s;-->
+<!--    }-->
 
-    #myImg:hover {opacity: 0.7;}
+<!--    #myImg:hover {opacity: 0.7;}-->
 
-    /* 弹窗背景 */
-    .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-    }
+<!--&lt;!&ndash;    /* 弹窗背景 */&ndash;&gt;-->
+<!--&lt;!&ndash;    .modal {&ndash;&gt;-->
+<!--&lt;!&ndash;        display: none; /* Hidden by default */&ndash;&gt;-->
+<!--&lt;!&ndash;        position: fixed; /* Stay in place */&ndash;&gt;-->
+<!--&lt;!&ndash;        z-index: 1; /* Sit on top */&ndash;&gt;-->
+<!--&lt;!&ndash;        padding-top: 100px; /* Location of the box */&ndash;&gt;-->
+<!--&lt;!&ndash;        left: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;        top: 0;&ndash;&gt;-->
+<!--&lt;!&ndash;        width: 100%; /* Full width */&ndash;&gt;-->
+<!--&lt;!&ndash;        height: 100%; /* Full height */&ndash;&gt;-->
+<!--&lt;!&ndash;        overflow: auto; /* Enable scroll if needed */&ndash;&gt;-->
+<!--&lt;!&ndash;        background-color: rgb(0,0,0); /* Fallback color */&ndash;&gt;-->
+<!--&lt;!&ndash;        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */&ndash;&gt;-->
+<!--&lt;!&ndash;    }&ndash;&gt;-->
 
-    /* 图片 */
-    .modal-content {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-    }
+<!--    /* 图片 */-->
+<!--    .modal-content {-->
+<!--        margin: auto;-->
+<!--        display: block;-->
+<!--        width: 80%;-->
+<!--        max-width: 700px;-->
+<!--    }-->
 
-    /* 文本内容 */
-    #caption {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-        text-align: center;
-        color: #ccc;
-        padding: 10px 0;
-        height: 150px;
-    }
+<!--    /* 文本内容 */-->
+<!--    #caption {-->
+<!--        margin: auto;-->
+<!--        display: block;-->
+<!--        width: 80%;-->
+<!--        max-width: 700px;-->
+<!--        text-align: center;-->
+<!--        color: #ccc;-->
+<!--        padding: 10px 0;-->
+<!--        height: 150px;-->
+<!--    }-->
 
-    /* 添加动画 */
-    .modal-content, #caption {
-        -webkit-animation-name: zoom;
-        -webkit-animation-duration: 0.6s;
-        animation-name: zoom;
-        animation-duration: 0.6s;
-    }
+<!--    /* 添加动画 */-->
+<!--    .modal-content, #caption {-->
+<!--        -webkit-animation-name: zoom;-->
+<!--        -webkit-animation-duration: 0.6s;-->
+<!--        animation-name: zoom;-->
+<!--        animation-duration: 0.6s;-->
+<!--    }-->
 
-    @-webkit-keyframes zoom {
-        from {-webkit-transform:scale(0)}
-        to {-webkit-transform:scale(1)}
-    }
+<!--    @-webkit-keyframes zoom {-->
+<!--        from {-webkit-transform:scale(0)}-->
+<!--        to {-webkit-transform:scale(1)}-->
+<!--    }-->
 
-    @keyframes zoom {
-        from {transform:scale(0)}
-        to {transform:scale(1)}
-    }
+<!--    @keyframes zoom {-->
+<!--        from {transform:scale(0)}-->
+<!--        to {transform:scale(1)}-->
+<!--    }-->
 
-    /* 关闭按钮 */
-    .close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 40px;
-        font-weight: bold;
-        transition: 0.3s;
-    }
+<!--    /* 关闭按钮 */-->
+<!--    .close {-->
+<!--        position: absolute;-->
+<!--        top: 15px;-->
+<!--        right: 35px;-->
+<!--        color: #f1f1f1;-->
+<!--        font-size: 40px;-->
+<!--        font-weight: bold;-->
+<!--        transition: 0.3s;-->
+<!--    }-->
 
-    .close:hover,
-    .close:focus {
-        color: #bbb;
-        text-decoration: none;
-        cursor: pointer;
-    }
+<!--    .close:hover,-->
+<!--    .close:focus {-->
+<!--        color: #bbb;-->
+<!--        text-decoration: none;-->
+<!--        cursor: pointer;-->
+<!--    }-->
 
-    /* 小屏幕中图片宽度为 100% */
-    @media only screen and (max-width: 700px){
-        .modal-content {
-            width: 100%;
-        }
-    }
-</style>
+<!--    /* 小屏幕中图片宽度为 100% */-->
+<!--    @media only screen and (max-width: 700px){-->
+<!--        .modal-content {-->
+<!--            width: 100%;-->
+<!--        }-->
+<!--    }-->
+<!--</style>-->
 {% endblock stylesheets %}
 
 {% block content %}
@@ -114,7 +114,67 @@
 
             </div>
             <button onclick="myClick()" id="my" style="float:right; display: none" class="btn btn-warning">重部署</button>
-            <button onclick="serverClick()" id="myImg" style="float:right; display: none" src="https://c.runoob.com/wp-content/uploads/2017/01/btotbhpudiagtmvlkyrs.jpg" alt="文本描述信息" class="btn btn-success">显示重部署服务器任务图</button>
+<!--            <button onclick="serverClick()" id="myImg" style="float:right; display: none" alt="文本描述信息" class="btn btn-success">显示重部署服务器任务图</button>-->
+            <button type="button" id="showModal" style="float:right; display: none;" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+              显示重部署服务器微服务列表
+            </button>
+
+            <!-- Modal -->
+            <div id="exampleModalCenter" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!--            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">重部署微服务列表</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>服务器编号</th>
+                                <th>微服务名</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for node in node_list %}
+                                <tr>
+                                    <td>3</td>
+                                    <td>多库分解查询代理</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>装备库查询</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>指挥官库查询</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>部队建制库查询</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>查询信息综合</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>A战区情报处理服务</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <!-- 弹窗 -->
             <div id="myModal" class="modal">
@@ -418,7 +478,8 @@
                         alert('{{ msg.message }}');
                         document.getElementById("list").style.display ='';
                         document.getElementById("my").style.display ='';
-                        document.getElementById("myImg").style.display ='';
+<!--                        document.getElementById("myImg").style.display ='';-->
+                        document.getElementById("showModal").style.display='';
                     {% endfor %}
 
                     function myClick()
@@ -446,27 +507,26 @@
                         });
                     }
 
-                    // 获取弹窗
-                    var modal = document.getElementById('myModal');
+<!--                    // 获取弹窗-->
+<!--                    var modal = document.getElementById('myModal');-->
 
-                    // 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容
-                    var img = document.getElementById('myImg');
-                    var modalImg = document.getElementById("img01");
-                    var captionText = document.getElementById("caption");
-                    img.onclick = function(){
-                        modal.style.display = "block";
-<!--                        <img id="myImg" style="display:none" src="https://c.runoob.com/wp-content/uploads/2017/01/btotbhpudiagtmvlkyrs.jpg" alt="文本描述信息" width="300" height="200">-->
-                        modalImg.src = "/static/images/micro-service_graph.jpg";
-                        captionText.innerHTML = "重部署任务图";
-                    }
+<!--                    // 获取图片插入到弹窗 - 使用 "alt" 属性作为文本部分的内容-->
+<!--                    var img = document.getElementById('myImg');-->
+<!--                    var modalImg = document.getElementById("img01");-->
+<!--                    var captionText = document.getElementById("caption");-->
+<!--                    img.onclick = function(){-->
+<!--                        modal.style.display = "block";-->
+<!--                        modalImg.src = "/static/images/micro_service_graph.jpg";-->
+<!--                        captionText.innerHTML = "重部署任务图";-->
+<!--                    }-->
 
-                    // 获取 <span> 元素，设置关闭按钮
-                    var span = document.getElementsByClassName("close")[0];
+<!--                    // 获取 <span> 元素，设置关闭按钮-->
+<!--                    var span = document.getElementsByClassName("close")[0];-->
 
-                    // 当点击 (x), 关闭弹窗
-                    span.onclick = function() {
-                      modal.style.display = "none";
-                    }
+<!--                    // 当点击 (x), 关闭弹窗-->
+<!--                    span.onclick = function() {-->
+<!--                      modal.style.display = "none";-->
+<!--                    }-->
                 </script>
             {% endif %}
 
@@ -1086,6 +1146,5 @@
     <script src="/static/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
     <!-- easy-pie-chart -->
     <script src="/static/vendors/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
-<!--    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
     <script src="/static/sweetalert/sweetalert.min.js"></script>
 {% endblock javascripts %}
