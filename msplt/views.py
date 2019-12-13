@@ -25,6 +25,34 @@ from django.contrib.sessions.backends.db import SessionStore
 from mymsplatform.settings import BASE_DIR
 
 
+def test_ttl(request):
+    if request.method == "POST":
+        config.load_kube_config('~/.kube/config')
+        v1 = client.CoreV1Api()
+        suc = 0
+        count = 0
+        start_time = time.time()
+        end_time = time.time()
+        while (end_time - start_time).seconds < 7:
+            pod = v1.read_namespaced_pod(name="nginx", namespace="default")
+            if pod is client.V1Pod():
+                suc += 1
+            count += 1
+            end_time = time.time()
+        messages.success("吞吐量(tps): " + suc / count)
+
+
+def test_sy(request):
+    if request.method == "POST":
+        config.load_kube_config('~/.kube/config')
+        v1 = client.CoreV1Api()
+        t = time.time()
+        service = v1.read_namespaced_service(name="nginx", namespace="default")
+        if service is not client.V1Service():
+            f = time.time()
+            sec = f - t
+            messages.success("时延测试：" + sec)
+
 def create_thread(request):
     while True:
         config.load_kube_config('~/.kube/config')
