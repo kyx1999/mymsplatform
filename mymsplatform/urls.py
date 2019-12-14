@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'node', views.node),
     url(r'pod', views.pod),
     url(r'upload', views.upload),
+    url(r'test', views.test),
     path('admin/', admin.site.urls),
     re_path(r'^.*\.html', views.gentella_html, name='gentella'),
     path('', views.login, name='default'),

@@ -2,8 +2,13 @@
 
 {% block title %} Form Buttons {% endblock title %}
 
+{% block stylesheets %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/static/sweetalert/sweetalert.css">
+{% endblock stylesheets %}
+
 {% block content %}
-    <div class="right_col" role="main">
+<div class="right_col" role="main">
     <div class="">
 
         <div class="clearfix"></div>
@@ -16,7 +21,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <button type="button" class="btn btn-primary">Primary</button>
+                        <button type="button" onclick="ttlClick()" class="btn btn-primary">测试</button>
                     </div>
                 </div>
 
@@ -31,7 +36,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <button type="button" class="btn btn-primary">Primary</button>
+                        <button type="button" onclick="syClick()" class="btn btn-primary">测试</button>
                     </div>
                 </div>
 
@@ -46,12 +51,30 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <button type="button" class="btn btn-primary">Primary</button>
+                        <button type="button" class="btn btn-primary">测试</button>
                     </div>
                 </div>
 
             </div>
         </div>
     </div>
-    </div>
+</div>
+
+
+
 {% endblock content %}
+
+{% block javascripts %}
+<script src="/static/sweetalert/sweetalert.min.js"></script>
+<script>
+    function ttlClick()
+    {
+        swal("吞吐量(tps): {{ttl}}, count: {{count}}")
+    }
+
+    function syClick()
+    {
+        swal("时延测试：{{sec}}, detal: {{detal}}")
+    }
+</script>
+{% endblock javascripts %}
