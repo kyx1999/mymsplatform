@@ -30,8 +30,8 @@ def test(request):
     config.load_kube_config('~/.kube/config')
     v1 = client.CoreV1Api()
 
-    suc = 0
-    count = 0
+    suc = 1
+    count = 1
     start_time = datetime.datetime.now()
     end_time = datetime.datetime.now()
     while (end_time - start_time).seconds < 7:
@@ -40,22 +40,22 @@ def test(request):
             suc += 1
         count += 1
         end_time = datetime.datetime.now()
-        ttl_time = suc / count
+        ttl_time = count / suc
     # messages.success("吞吐量(tps): " + suc / count)
 
     t = datetime.datetime.now()
-    # service = v1.read_namespaced_service(name="nginx-706", namespace="default")
+    # service = v1.read_namespaced_service(name="nginx", namespace="default")
     service = v1.read_namespaced_pod(name="nginx-706", namespace="default")
     # if service is not client.V1Service():
     if service is not client.V1Pod():
         f = datetime.datetime.now()
         detal = f - t
-        sec = (f - t).seconds
+        sec = (f - t).microseconds
         # messages.success("时延测试：" + sec)
     return render(request, 'test.html', {'count':count,
-                                        'ttl': ttl_time,
+                                         'ttl': ttl_time,
                                          'detal': detal,
-                                      'sec': sec})
+                                         'sec': sec})
 
 
 
