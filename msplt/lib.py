@@ -1,24 +1,65 @@
 import random
 
-import kubernetes.client
 from kubernetes.client.rest import ApiException
-from pprint import pprint
 from kubernetes import client, config, watch
 import time
 import json
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils import timezone
+import requests
+import threading
+import uuid
 from datetime import datetime
 from datetime import timedelta
 
 from mymsplatform.settings import BASE_DIR
 
 
+
+
+
+class postrequests():
+    def __init__(self):
+        # 产生UUID
+        u = uuid.uuid1()
+        # 产生订单编号
+        orderID = 'TEST' + u.hex
+        self.url = 'http://127.0.0.1:8000'
+        self.data = {"csrfmiddlewaretoken": "E3OKPqmHQyt6MLaMfFArSsBJNo7pllgsEn6iFHqk5pGEURqm12a58b7VfG40TnsG",
+                     "username": "1234", "password": "1234"}
+        self.headers = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
+            'Accept - Encoding': 'gzip, deflate, br',
+            'Accept - Language': 'zh-CN, zh; q=0.9',
+            'Cache - Control': 'max-age=0',
+            'Connection': 'keep-alive',
+            'Content - Length': '112',
+            'Content - Type': 'application/x-www-form-urlencoded',
+            'Cookie': 'csrftoken = i3egm2oEU39XnMmqubsUNHMOI9OkjNDwinwOcjsh9UmvvSC0gy2y3qi0arLVRPPK',
+            'Host': '127.0.0.1:8000',
+            'Origin': 'http://127.0.0.1:8000',
+            'Referer': 'http://127.0.0.1: 8000/',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-User': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36(KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'
+        }
+
+    def post(self):
+        try:
+            r = requests.post(self.url, self.data, headers=self.headers)
+            print(r.text)
+        except Exception as e:
+            print(e)
+
+
 class manager(object):
     def __init__(self):
         # config.load_kube_config('E:/pythonProject/test/resource/config')
-        config.load_kube_config('~/.kube/config')  # kubectl config view -- to find the config position to replace this line
+        config.load_kube_config(
+            '~/.kube/config')  # kubectl config view -- to find the config position to replace this line
         self.core_v1 = client.CoreV1Api()
         self.apps_v1 = client.AppsV1Api()
 

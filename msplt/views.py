@@ -6,23 +6,23 @@ from django.http import HttpResponse
 from django.contrib import messages
 from msplt import models
 from msplt.lib import manager
+from msplt.lib import postrequests
 from kubernetes import client, config
 import os
 import datetime
+import xml.dom.minidom as xmldom
+import xmltodict
+import json
 import time
-from django.contrib.sessions.models import Session
-from django.core.cache import cache
-from django.contrib.sessions.backends.db import SessionStore
-
-# import json
+# from django.contrib.sessions.models import Session
+# from django.core.cache import cache
+# from django.contrib.sessions.backends.db import SessionStore
 # from .forms import UploadFileForm, handle_uploaded_file
-
-
 # from django.forms import ModelForm
 
 
 # Create your views here.
-from mymsplatform.settings import BASE_DIR
+# from mymsplatform.settings import BASE_DIR
 
 
 def test(request):
@@ -52,6 +52,7 @@ def test(request):
         detal = f - t
         sec = (f - t).microseconds
         # messages.success("时延测试：" + sec)
+
     return render(request, 'test.html', {'count':count,
                                          'ttl': ttl_time,
                                          'detal': detal,
@@ -102,6 +103,22 @@ def upload(request):
         mgr.parse_creat()
     return redirect('/index.html')
 
+
+def multiuser(request):
+    fd = open('user.xml')
+    dom = xmltodict.parse(fd.read())
+    jsonstr = json.dumps(dom, indent=1)
+    str = json.loads(jsonstr)
+    try:
+        for i in range(0, 100):
+            loginn = postrequests()
+            t = threading.Thread(target=loginn.post)
+            t.start()
+        messages.success(request, "创建100个协同用户成功！")
+    except Exception as e:
+        messages.warning(request, "创建100个协同用户错误！")
+
+    return redirect("/index.html")
 
 #
 # def get_all_logged_in_users():
