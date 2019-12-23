@@ -52,6 +52,8 @@ def test(request):
         detal = f - t
         sec = (f - t).microseconds
         # messages.success("时延测试：" + sec)
+        while(sec > 5000):
+            sec - 5000
 
     fd = open('user.xml')
     dom = xmltodict.parse(fd.read())
