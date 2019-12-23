@@ -51,7 +51,7 @@
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        <button type="button" class="btn btn-primary">测试</button>
+                        <button type="button" onclick="multiClick()" class="btn btn-primary">测试</button>
                     </div>
                 </div>
 
@@ -69,12 +69,17 @@
 <script>
     function ttlClick()
     {
-        swal("吞吐量(tps): {{ttl}}, count: {{count}}")
+        swal("吞吐量(tps): {{ttl}}")
     }
 
     function syClick()
     {
-        swal("时延测试：{{sec}}, detal: {{detal}}")
+        swal("时延测试：{{sec}}")
+    }
+
+    function multiClick()
+    {
+        swal("{{msg}}")
     }
 </script>
 {% endblock javascripts %}

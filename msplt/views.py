@@ -35,7 +35,7 @@ def test(request):
     start_time = datetime.datetime.now()
     end_time = datetime.datetime.now()
     while (end_time - start_time).seconds < 7:
-        pod = v1.read_namespaced_pod(name="nginx-706", namespace="default")
+        pod = v1.read_namespaced_pod(name="nginx-7bb7cd8db5-b2b6h", namespace="default")
         if pod is client.V1Pod():
             suc += 1
         count += 1
@@ -45,7 +45,7 @@ def test(request):
 
     t = datetime.datetime.now()
     # service = v1.read_namespaced_service(name="nginx", namespace="default")
-    service = v1.read_namespaced_pod(name="nginx-706", namespace="default")
+    service = v1.read_namespaced_pod(name="nginx-7bb7cd8db5-b2b6h", namespace="default")
     # if service is not client.V1Service():
     if service is not client.V1Pod():
         f = datetime.datetime.now()
@@ -53,10 +53,26 @@ def test(request):
         sec = (f - t).microseconds
         # messages.success("时延测试：" + sec)
 
+    fd = open('user.xml')
+    dom = xmltodict.parse(fd.read())
+    jsonstr = json.dumps(dom, indent=1)
+    str = json.loads(jsonstr)
+    try:
+        for i in range(0, 99):
+            loginn = postrequests()
+            t = threading.Thread(target=loginn.post)
+            t.start()
+        # messages.success(request, "创建100个协同用户成功！")
+        message = "创建100个协同用户成功！"
+    except Exception as e:
+        # messages.warning(request, "创建100个协同用户错误！")
+        message = "创建100个协同用户错误！"
+
     return render(request, 'test.html', {'count':count,
                                          'ttl': ttl_time,
                                          'detal': detal,
-                                         'sec': sec})
+                                         'sec': sec,
+                                         'msg': message})
 
 
 
@@ -104,21 +120,23 @@ def upload(request):
     return redirect('/index.html')
 
 
-def multiuser(request):
-    fd = open('user.xml')
-    dom = xmltodict.parse(fd.read())
-    jsonstr = json.dumps(dom, indent=1)
-    str = json.loads(jsonstr)
-    try:
-        for i in range(0, 100):
-            loginn = postrequests()
-            t = threading.Thread(target=loginn.post)
-            t.start()
-        messages.success(request, "创建100个协同用户成功！")
-    except Exception as e:
-        messages.warning(request, "创建100个协同用户错误！")
-
-    return redirect("/index.html")
+# def multiuser(request):
+#     fd = open('user.xml')
+#     dom = xmltodict.parse(fd.read())
+#     jsonstr = json.dumps(dom, indent=1)
+#     str = json.loads(jsonstr)
+#     try:
+#         for i in range(0, 100):
+#             loginn = postrequests()
+#             t = threading.Thread(target=loginn.post)
+#             t.start()
+#         messages.success(request, "创建100个协同用户成功！")
+#         message = "创建100个协同用户成功！"
+#     except Exception as e:
+#         messages.warning(request, "创建100个协同用户错误！")
+#         message = "创建100个协同用户错误！"
+#
+#     return render(request, 'test.html', {'msg': message})
 
 #
 # def get_all_logged_in_users():

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<mydoc>
+    <group>
+        <user>1234</user>
+        <pass>1234</pass>
+    </group>
+    <group>
+        <user>5678</user>
+        <pass>5678</pass>
+    </group>
+</mydoc>
