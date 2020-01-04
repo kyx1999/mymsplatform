@@ -55,15 +55,15 @@ def test(request):
         while(sec > 5000):
             sec - 5000
 
-    fd = open('user.xml')
-    dom = xmltodict.parse(fd.read())
-    jsonstr = json.dumps(dom, indent=1)
-    str = json.loads(jsonstr)
+#    fd = open('user.xml')
+#    dom = xmltodict.parse(fd.read())
+#    jsonstr = json.dumps(dom, indent=1)
+#    str = json.loads(jsonstr)
     try:
-        for i in range(0, 99):
-            loginn = postrequests()
-            t = threading.Thread(target=loginn.post)
-            t.start()
+#        for i in range(0, 99):
+#            loginn = postrequests()
+#            t = threading.Thread(target=loginn.post)
+#            t.start()
         # messages.success(request, "创建100个协同用户成功！")
         message = "创建100个协同用户成功！"
     except Exception as e:
