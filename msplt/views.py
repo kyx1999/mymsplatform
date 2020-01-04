@@ -54,6 +54,7 @@ def test(request):
         # messages.success("时延测试：" + sec)
         while(sec > 5000):
             sec - 5000
+        sec = sec/1000
 
 #    fd = open('user.xml')
 #    dom = xmltodict.parse(fd.read())
