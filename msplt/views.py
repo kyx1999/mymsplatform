@@ -56,19 +56,17 @@ def test(request):
             sec - 5000
         sec = sec/1000
 
-#    fd = open('user.xml')
-#    dom = xmltodict.parse(fd.read())
-#    jsonstr = json.dumps(dom, indent=1)
-#    str = json.loads(jsonstr)
+   fd = open('user.xml')
+   dom = xmltodict.parse(fd.read())
+   jsonstr = json.dumps(dom, indent=1)
+   str = json.loads(jsonstr)
     try:
-#        for i in range(0, 99):
-#            loginn = postrequests()
-#            t = threading.Thread(target=loginn.post)
-#            t.start()
-        # messages.success(request, "创建100个协同用户成功！")
+       for i in range(0, 99):
+           loginn = postrequests()
+           t = threading.Thread(target=loginn.post)
+           t.start()
         message = "创建100个协同用户成功！"
     except Exception as e:
-        # messages.warning(request, "创建100个协同用户错误！")
         message = "创建100个协同用户错误！"
 
     return render(request, 'test.html', {'count':count,
