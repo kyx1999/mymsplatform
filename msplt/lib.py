@@ -6,6 +6,7 @@ import time
 import json
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 import requests
 import threading
@@ -18,7 +19,7 @@ from mymsplatform.settings import BASE_DIR
 
 
 
-
+@csrf_exempt
 class postrequests():
     def __init__(self):
         # 产生UUID
@@ -26,8 +27,11 @@ class postrequests():
         # 产生订单编号
         orderID = 'TEST' + u.hex
         self.url = 'http://127.0.0.1:8000'
-        self.data = {"csrfmiddlewaretoken": "E3OKPqmHQyt6MLaMfFArSsBJNo7pllgsEn6iFHqk5pGEURqm12a58b7VfG40TnsG",
-                     "username": "1234", "password": "1234"}
+        self.data = {
+            "csrfmiddlewaretoken": "E3OKPqmHQyt6MLaMfFArSsBJNo7pllgsEn6iFHqk5pGEURqm12a58b7VfG40TnsG",
+            "username": "1234",
+            "password": "1234"
+        }
         self.headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
             'Accept - Encoding': 'gzip, deflate, br',
@@ -50,9 +54,9 @@ class postrequests():
     def post(self):
         try:
             r = requests.post(self.url, self.data, headers=self.headers)
-            print(r.text)
+            print("success")
         except Exception as e:
-            print(e)
+            print("error")
 
 
 class manager(object):

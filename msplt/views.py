@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.template import loader
 from django.http import HttpResponse
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 from msplt import models
 from msplt.lib import manager
 from msplt.lib import postrequests
@@ -14,6 +15,8 @@ import xml.dom.minidom as xmldom
 import xmltodict
 import json
 import time
+
+
 # from django.contrib.sessions.models import Session
 # from django.core.cache import cache
 # from django.contrib.sessions.backends.db import SessionStore
@@ -24,7 +27,7 @@ import time
 # Create your views here.
 # from mymsplatform.settings import BASE_DIR
 
-
+@csrf_exempt
 def test(request):
     # if request.method == "POST":
     config.load_kube_config('~/.kube/config')
@@ -52,31 +55,29 @@ def test(request):
         detal = f - t
         sec = (f - t).microseconds
         # messages.success("时延测试：" + sec)
-        while(sec > 5000):
+        while (sec > 5000):
             sec - 5000
-        sec = sec/1000
+        sec = sec / 1000
 
-   fd = open('user.xml')
-   dom = xmltodict.parse(fd.read())
-   jsonstr = json.dumps(dom, indent=1)
-   str = json.loads(jsonstr)
+
+    fd = open('user.xml')
+    dom = xmltodict.parse(fd.read())
+    jsonstr = json.dumps(dom, indent=1)
+    str = json.loads(jsonstr)
     try:
-       for i in range(0, 99):
-           loginn = postrequests()
-           t = threading.Thread(target=loginn.post)
-           t.start()
+        for i in range(0, 99):
+            loginn = postrequests()
+            t = threading.Thread(target=loginn.post)
+            t.start()
         message = "创建100个协同用户成功！"
     except Exception as e:
         message = "创建100个协同用户错误！"
 
-    return render(request, 'test.html', {'count':count,
-                                         'ttl': ttl_time,
-                                         'detal': detal,
-                                         'sec': sec,
-                                         'msg': message})
-
-
-
+    return render(request, 'test.html', {'count': count,
+                                     'ttl': ttl_time,
+                                     'detal': detal,
+                                     'sec': sec,
+                                     'msg': message})
 
 
 # def test_sy(request):
@@ -89,7 +90,6 @@ def test(request):
 #             f = time.time()
 #             sec = f - t
 #             messages.success("时延测试：" + sec)
-
 
 
 def create_thread(request):
